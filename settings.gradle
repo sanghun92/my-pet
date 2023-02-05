@@ -1,6 +1,4 @@
 rootProject.name = 'my-pet'
 include("my-pet-api")
-
-rootProject.children.each { project ->
-    project.buildFileName = "${project.name}.gradle"
-}
+include("my-pet-common")
+include("domain:my-pet-member-domain")
