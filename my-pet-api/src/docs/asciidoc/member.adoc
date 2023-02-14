@@ -1,0 +1,10 @@
+[[Member-API]]
+== Member API
+
+[[Member-생성]]
+=== Member 생성
+operation::member/member-create[snippets='curl-request,http-request,request-fields,http-response,response-headers']
+
+[[Member-인증]]
+=== Member 인증
+operation::member/member-certification[snippets='curl-request,http-request,query-parameters,http-response']
