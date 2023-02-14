@@ -22,15 +22,15 @@ public abstract class ApiResponseV1<T> {
         return OkResponseV1.of(body);
     }
 
-    public static ApiResponseV1<List<ErrorResponseV1.Body>> clientError(String message) {
+    public static ErrorResponseV1 clientError(String message) {
         return ErrorResponseV1.from(HttpStatus.BAD_REQUEST.value(), message);
     }
 
-    public static ApiResponseV1<List<ErrorResponseV1.Body>> clientError(List<String> message) {
+    public static ErrorResponseV1 clientError(List<String> message) {
         return ErrorResponseV1.from(HttpStatus.BAD_REQUEST.value(), message);
     }
 
-    public static ApiResponseV1<List<ErrorResponseV1.Body>> serverError(String message) {
+    public static ErrorResponseV1 serverError(String message) {
         return ErrorResponseV1.from(HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
     }
 

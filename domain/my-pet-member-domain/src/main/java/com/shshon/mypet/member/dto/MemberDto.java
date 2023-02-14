@@ -32,6 +32,19 @@ public class MemberDto {
     }
 
     public Member toMember() {
-        return Member.of(this.email, this.password, this.nickname);
+        return Member.createMember(
+                this.email,
+                this.password,
+                this.nickname
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "MemberDto{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nickname='" + nickname + '\'' +
+                '}';
     }
 }

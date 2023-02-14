@@ -26,7 +26,7 @@ public class CreateMemberController {
         this.createMemberService = createMemberService;
     }
 
-    @PostMapping("/v1/member")
+    @PostMapping(MemberPaths.JOIN_MEMBER)
     public ResponseEntity<?> joinMember(@RequestBody @Valid CreateMemberRequest request) {
         MemberDto member = createMemberService.createMember(request.toMember());
         return ResponseEntity.created(URI.create("v1/member/" + member.getId())).build();

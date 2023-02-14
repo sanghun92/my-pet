@@ -1,4 +1,5 @@
 rootProject.name = 'my-pet'
 include("my-pet-api")
 include("my-pet-common")
+include("my-pet-infra")
 include("domain:my-pet-member-domain")

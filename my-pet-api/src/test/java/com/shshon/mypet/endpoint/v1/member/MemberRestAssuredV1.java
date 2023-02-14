@@ -12,7 +12,7 @@ public class MemberRestAssuredV1 {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("/v1/member")
+                .when().post(MemberPaths.JOIN_MEMBER)
                 .then().log().all()
                 .extract();
     }

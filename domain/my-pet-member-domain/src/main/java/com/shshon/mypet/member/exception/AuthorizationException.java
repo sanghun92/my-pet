@@ -1,4 +1,6 @@
 package com.shshon.mypet.member.exception;
 
-public class AuthorizationException extends RuntimeException {
+import com.shshon.mypet.common.exception.ClientException;
+
+public class AuthorizationException extends ClientException {
 }
