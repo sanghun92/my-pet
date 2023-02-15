@@ -6,3 +6,6 @@ spring:
       local:
         - db
         - infra
+      test:
+        - db
+        - infra
