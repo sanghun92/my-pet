@@ -1,0 +1,3 @@
+[submodule "my-pet-api/src/main/resources/config"]
+	path = my-pet-api/src/main/resources/config
+	url = https://github.com/sanghun92/my-pet-config.git
