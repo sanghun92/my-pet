@@ -1,0 +1,6 @@
+[[Auth-API]]
+== Auth API
+
+[[Auth-로그인]]
+=== 로그인
+operation::auth/member-login[snippets='curl-request,http-request,request-fields,http-response,response-fields']
