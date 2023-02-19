@@ -1,0 +1,39 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
+dependencies {
+    // spring boot
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // QueryDSL
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // infra
+    implementation project(":my-pet-infra")
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+clean {
+    delete file(querydslDir)
+}
