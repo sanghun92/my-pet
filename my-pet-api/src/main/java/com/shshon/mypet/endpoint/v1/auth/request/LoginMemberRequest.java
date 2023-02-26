@@ -2,6 +2,7 @@ package com.shshon.mypet.endpoint.v1.auth.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import static com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest.Const.*;
 
 @Getter
+@Builder
+@JsonDeserialize(builder = LoginMemberRequest.LoginMemberRequestBuilder.class)
 public class LoginMemberRequest {
 
     @JsonProperty(FILED_EMAIL)
@@ -22,12 +25,6 @@ public class LoginMemberRequest {
     @JsonPropertyDescription(DESC_PASSWORD)
     @NotNull(message = MESSAGE_NOT_EMPTY_PASSWORD)
     private final String password;
-
-    @Builder
-    public LoginMemberRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
 
     public static class Const {
         public static final String FILED_EMAIL = "email";

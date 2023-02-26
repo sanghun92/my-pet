@@ -1,6 +1,6 @@
 package com.shshon.mypet.endpoint.v1.member;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shshon.mypet.endpoint.RestControllerTest;
 import com.shshon.mypet.endpoint.v1.member.request.CreateMemberRequest;
 import com.shshon.mypet.member.dto.MemberDto;
 import com.shshon.mypet.member.service.CreateMemberService;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,14 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
-@WebMvcTest(CreateMemberController.class)
-class CreateMemberControllerTest {
+class CreateMemberControllerTest extends RestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private CreateMemberService createMemberService;
@@ -63,7 +58,7 @@ class CreateMemberControllerTest {
                 .build();
         ResultActions resultActions = this.mockMvc.perform(
                 post(MemberPaths.JOIN_MEMBER)
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(toJsonBytes(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         );

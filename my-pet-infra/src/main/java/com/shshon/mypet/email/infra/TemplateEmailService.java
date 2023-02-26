@@ -24,15 +24,15 @@ public class TemplateEmailService implements EmailService {
 
     private String getMailContents(MailMessageDto mailMessage) {
         Context context = new Context();
-        mailMessage.getAttribute().forEach(context::setVariable);
-        return templateEngine.process(mailMessage.getTemplate(), context);
+        mailMessage.attribute().forEach(context::setVariable);
+        return templateEngine.process(mailMessage.template(), context);
     }
 
     private MimeMessage toMailMessage(MailMessageDto mailMessage) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
-            message.addRecipients(MimeMessage.RecipientType.TO, String.join(",", mailMessage.getTo()));
-            message.setSubject(mailMessage.getSubject());
+            message.addRecipients(MimeMessage.RecipientType.TO, String.join(",", mailMessage.to()));
+            message.setSubject(mailMessage.subject());
             message.setText(getMailContents(mailMessage), "utf-8", "html");
         } catch (MessagingException e) {
             throw new RuntimeException(e);

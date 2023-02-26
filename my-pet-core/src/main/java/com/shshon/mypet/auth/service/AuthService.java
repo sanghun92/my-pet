@@ -1,8 +1,11 @@
 package com.shshon.mypet.auth.service;
 
+import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.auth.infra.JwtTokenProvider;
+import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.domain.MemberRepository;
+import com.shshon.mypet.member.exception.AuthorizationException;
 import com.shshon.mypet.member.exception.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +27,15 @@ public class AuthService {
                 .authenticate(password);
 
         return TokenDto.of(jwtTokenProvider.createToken(email));
+    }
+
+    public LoginMember findMemberByToken(String token) {
+        if(!jwtTokenProvider.validateToken(token)) {
+            throw new AuthorizationException();
+        }
+        String email = jwtTokenProvider.getPayload(token);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+        return LoginMember.from(member);
     }
 }

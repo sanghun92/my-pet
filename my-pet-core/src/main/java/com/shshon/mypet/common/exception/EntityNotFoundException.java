@@ -7,8 +7,4 @@ public class EntityNotFoundException extends ClientException {
     public EntityNotFoundException() {
         super(DEFAULT_MESSAGE);
     }
-
-    public EntityNotFoundException(String message) {
-        super(message);
-    }
 }

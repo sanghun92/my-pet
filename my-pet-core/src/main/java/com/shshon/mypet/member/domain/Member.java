@@ -1,37 +1,37 @@
 package com.shshon.mypet.member.domain;
 
+import com.shshon.mypet.common.domain.BaseTimeEntity;
 import com.shshon.mypet.member.exception.AuthorizationException;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "members",
-        uniqueConstraints = @UniqueConstraint(name = "idx_member_email", columnNames = "email")
-)
-public class Member {
+@Table(name = "members")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     @Getter
     private String email;
 
     @Embedded
     private Password password;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     @Getter
     private String nickname;
 
     @Embedded
     private MemberCertification certification;
-
-    protected Member() {}
 
     private Member(String email,
                    Password password,

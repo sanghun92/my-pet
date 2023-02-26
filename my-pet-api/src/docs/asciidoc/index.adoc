@@ -12,3 +12,4 @@ endif::[]
 
 include::./member.adoc[]
 include::./auth.adoc[]
+include::./pet.adoc[]

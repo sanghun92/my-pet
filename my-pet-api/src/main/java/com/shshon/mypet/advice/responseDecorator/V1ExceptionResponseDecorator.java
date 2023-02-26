@@ -46,15 +46,7 @@ public class V1ExceptionResponseDecorator implements ErrorController {
         return this.exceptionHandlers.stream()
                 .filter(handler -> handler.support(exception))
                 .findFirst()
-                .orElse(unhandledExceptionHandler())
+                .orElseThrow(IllegalAccessError::new)
                 .onException(request, exception);
-    }
-
-    private static ApiV1ExceptionHandler unhandledExceptionHandler() {
-        return (request, exception) -> {
-            log.error("Unhandled exception:", exception);
-            ErrorResponseV1 response = ApiResponseV1.serverError(exception.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        };
     }
 }

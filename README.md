@@ -6,8 +6,15 @@
 - UI는 카카오 오븐으로 대체하여 REST API 서버만 구성
  
 ### ✅ 기술 스택
-- Back-End : Java17, Spring Boot, JPA
-- Infra : AWS(EC2, RDS) 
+- Back-End
+  - Java17
+  - Spring Boot
+  - Spring Data JPA
+- Infra
+  - AWS EC2
+  - AWS RDS
+- ETC
+  - Spring Rest Docs
 
 ### ✅ 아키텍쳐
 ![architecture](./docs/architecture.png)
