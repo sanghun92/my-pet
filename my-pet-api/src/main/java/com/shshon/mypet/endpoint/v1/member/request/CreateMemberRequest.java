@@ -2,6 +2,7 @@ package com.shshon.mypet.endpoint.v1.member.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.shshon.mypet.member.dto.MemberDto;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import static com.shshon.mypet.endpoint.v1.member.request.CreateMemberRequest.Const.*;
 
 @Getter
+@Builder
+@JsonDeserialize(builder = CreateMemberRequest.CreateMemberRequestBuilder.class)
 public class CreateMemberRequest {
     @JsonProperty(FILED_EMAIL)
     @JsonPropertyDescription(DESC_EMAIL)
@@ -28,13 +31,6 @@ public class CreateMemberRequest {
     @Size(min = 2, max = 20, message = MESSAGE_INVALID_NICKNAME)
     @NotNull(message = MESSAGE_NOT_EMPTY_NICKNAME)
     private final String nickname;
-
-    @Builder
-    public CreateMemberRequest(String email, String password, String nickname) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-    }
 
     public MemberDto toMember() {
         return MemberDto.builder()

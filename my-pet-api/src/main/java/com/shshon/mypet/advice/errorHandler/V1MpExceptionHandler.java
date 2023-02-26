@@ -31,7 +31,10 @@ public class V1MpExceptionHandler implements ApiV1ExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponseV1> onClientException(HttpServletRequest request, ClientException ex) {
-        log.error("Client exception: {}", getRequestURI(request), ex);
+        log.error("Client exception: [{}] {}",
+                request.getMethod(),
+                getRequestURI(request),
+                ex);
 
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ErrorResponseV1 response = ErrorResponseV1.from(httpStatus.value(), ex.getMessage());
@@ -39,7 +42,10 @@ public class V1MpExceptionHandler implements ApiV1ExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponseV1> onServerException(HttpServletRequest request, ServerException ex) {
-        log.error("Server exception: {}", getRequestURI(request), ex);
+        log.error("Server exception: [{}] {}",
+                request.getMethod(),
+                getRequestURI(request),
+                ex);
 
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         ErrorResponseV1 response = ErrorResponseV1.from(httpStatus.value(), ex.getMessage());

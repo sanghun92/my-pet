@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active:
+      - local
+    group:
+      local:
+        - db
+        - infra
+        - security
+        - aws
+      test:
+        - db
+        - infra
+        - security
+        - aws

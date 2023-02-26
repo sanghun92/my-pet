@@ -1,0 +1,6 @@
+[[PET-API]]
+== PET API
+
+[[PET-CREATE]]
+=== 반려 동물 등록
+operation::pet/mypet-create[snippets='curl-request,http-request,request-parts,request-part-request-fields,http-response,response-headers']
