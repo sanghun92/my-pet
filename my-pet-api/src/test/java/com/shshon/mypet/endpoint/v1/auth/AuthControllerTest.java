@@ -3,21 +3,19 @@ package com.shshon.mypet.endpoint.v1.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.auth.service.AuthService;
+import com.shshon.mypet.endpoint.RestControllerTest;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
 import com.shshon.mypet.endpoint.v1.auth.response.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.UUID;
 
 import static com.shshon.mypet.ApiDocumentUtils.*;
 import static com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest.Const.*;
@@ -32,8 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
-@WebMvcTest(AuthController.class)
-class AuthControllerTest {
+class AuthControllerTest extends RestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

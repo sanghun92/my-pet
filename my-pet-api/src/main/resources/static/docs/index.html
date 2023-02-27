@@ -589,7 +589,7 @@ Location: v1/member/1</code></pre>
 <h4 id="Member-인증_curl_request"><a class="link" href="#Member-인증_curl_request">Curl request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/member/certification?code=610cb6b3-f135-4543-83d1-64598fad2e50' -i -X GET \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/member/certification?code=71a8f606-77b7-4c82-8965-6d2998c432b4' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -H 'Accept: application/json'</code></pre>
 </div>
@@ -599,7 +599,7 @@ Location: v1/member/1</code></pre>
 <h4 id="Member-인증_http_request"><a class="link" href="#Member-인증_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/member/certification?code=610cb6b3-f135-4543-83d1-64598fad2e50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/member/certification?code=71a8f606-77b7-4c82-8965-6d2998c432b4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -762,7 +762,7 @@ Content-Length: 159
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/pet' -i -X POST \
     -H 'Content-Type: multipart/form-data;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc3NDMzNTA0LCJleHAiOjE2Nzc0MzcxMDR9.Pg1Kl7V4NA7GycCOs_40G6C_CE2DAoj2lVvKh-aRDfI' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc3NDk5MzAwLCJleHAiOjE2Nzc1MDI5MDB9.NGk0aORcKx69oh_WdjdxM_6g1GHtXMmnkeO3Vl7apfA' \
     -F 'petImage=@coffee_sample.jpg;type=multipart/form-data' \
     -F 'request=@request;type=application/json'</code></pre>
 </div>
@@ -774,7 +774,7 @@ Content-Length: 159
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/pet HTTP/1.1
 Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc3NDMzNTA0LCJleHAiOjE2Nzc0MzcxMDR9.Pg1Kl7V4NA7GycCOs_40G6C_CE2DAoj2lVvKh-aRDfI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc3NDk5MzAwLCJleHAiOjE2Nzc1MDI5MDB9.NGk0aORcKx69oh_WdjdxM_6g1GHtXMmnkeO3Vl7apfA
 Host: localhost:8080
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -902,7 +902,7 @@ Location: v1/pet/mine</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-22 01:45:38 +0900
+Last updated 2023-02-27 02:59:35 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
