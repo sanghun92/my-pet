@@ -8,9 +8,6 @@ dependencies {
     // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // sub modules
-    implementation project(':my-pet-infra')
-
     // QueryDSL
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"

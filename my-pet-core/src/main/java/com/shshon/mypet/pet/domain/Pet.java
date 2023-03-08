@@ -18,22 +18,21 @@ import java.util.Objects;
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE pet SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Pet extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
+
+    @Column(name = "category_id", nullable = false)
+    private Long categoryId;
 
     @Column(nullable = false, unique = true, length = 20)
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_pet_pet_category"))
-    private PetCategory category;
 
     @Column
     private LocalDate birthDay;
@@ -49,21 +48,23 @@ public class Pet extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private PetBodyType bodyType;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pet_image_id", foreignKey = @ForeignKey(name = "fk_pet_image"))
-    private ImageMetaData petImageMetaData;
-
     private Boolean isDeleted = Boolean.FALSE;
+
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PetImage petImage;
+
     @Builder
     public Pet(Long memberId,
-               PetCategory category,
+               Long categoryId,
+               PetImage petImage,
                String name,
                LocalDate birthDay,
                PetGender gender,
                Integer bodyWeight,
                PetBodyType bodyType) {
         this.memberId = memberId;
-        this.category = category;
+        this.categoryId = categoryId;
+        this.petImage = petImage;
         this.name = name;
         this.birthDay = birthDay;
         this.gender = gender;
@@ -72,7 +73,10 @@ public class Pet extends BaseTimeEntity {
     }
 
     public void changePetImage(ImageMetaData imageMetaData) {
-        this.petImageMetaData = imageMetaData;
+        this.petImage = PetImage.builder()
+                .pet(this)
+                .imageMetaData(imageMetaData)
+                .build();
     }
 
     @Override

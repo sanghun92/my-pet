@@ -7,19 +7,15 @@ import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.domain.MemberRepository;
 import com.shshon.mypet.member.exception.AuthorizationException;
 import com.shshon.mypet.member.exception.MemberNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public AuthService(MemberRepository memberRepository,
-                       JwtTokenProvider jwtTokenProvider) {
-        this.memberRepository = memberRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     public TokenDto login(String email, String password) {
         memberRepository.findByEmail(email)

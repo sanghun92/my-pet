@@ -1,6 +1,6 @@
 package com.shshon.mypet.endpoint.v1.member;
 
-import com.shshon.mypet.endpoint.v1.member.request.CreateMemberRequest;
+import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
@@ -8,7 +8,7 @@ import io.restassured.response.Response;
 
 public class MemberRestAssuredV1 {
 
-    public static ExtractableResponse<Response> joinMember(CreateMemberRequest request) {
+    public static ExtractableResponse<Response> joinMember(MemberRegisterRequest request) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)

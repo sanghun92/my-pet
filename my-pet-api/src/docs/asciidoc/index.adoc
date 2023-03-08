@@ -9,7 +9,9 @@ endif::[]
 :toc: left
 :toclevels: 2
 :sectlinks:
+:docinfo: shared-head
 
+include::./common/overview.adoc[]
 include::./member.adoc[]
 include::./auth.adoc[]
 include::./pet.adoc[]

@@ -5,7 +5,11 @@ import lombok.Getter;
 @Getter
 public class OkResponseV1<T> extends ApiResponseV1<T> {
 
-    private OkResponseV1(T body) {
+    protected OkResponseV1() {
+        super(Type.OK, null);
+    }
+
+    protected OkResponseV1(T body) {
         super(Type.OK, body);
     }
 

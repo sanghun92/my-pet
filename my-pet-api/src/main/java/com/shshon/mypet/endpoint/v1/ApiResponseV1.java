@@ -11,11 +11,11 @@ public abstract class ApiResponseV1<T> {
 
     private final LocalDateTime timestamp = LocalDateTime.now();
     private final Type type;
-    private final T body;
+    private final T data;
 
-    public ApiResponseV1(Type type, T body) {
+    public ApiResponseV1(Type type, T data) {
         this.type = type;
-        this.body = body;
+        this.data = data;
     }
 
     public static <T> ApiResponseV1<T> ok(T body) {

@@ -19,16 +19,20 @@ dependencies {
     // db
     implementation 'mysql:mysql-connector-java'
 
-    // core module
+    // modules
     implementation project(':my-pet-config')
     implementation project(':my-pet-core')
-    implementation project(':my-pet-infra')
+    implementation project(':my-pet-core-infra')
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation 'io.rest-assured:rest-assured:5.3.0'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.google.guava:guava:14.0'
+
+    // to fix [javax.annotation.meta.When not found]
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 test {

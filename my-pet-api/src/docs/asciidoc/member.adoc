@@ -3,8 +3,8 @@
 
 [[Member-생성]]
 === Member 생성
-operation::member/member-create[snippets='curl-request,http-request,request-fields,http-response,response-headers']
+operation::member/member-create[snippets='curl-request,request-fields,http-request,response-headers,http-response']
 
 [[Member-인증]]
 === Member 인증
-operation::member/member-certification[snippets='curl-request,http-request,query-parameters,http-response']
+operation::member/member-certification[snippets='curl-request,query-parameters,http-request,http-response']

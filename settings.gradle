@@ -2,4 +2,4 @@ rootProject.name = 'my-pet'
 include("my-pet-api")
 include("my-pet-config")
 include("my-pet-core")
-include("my-pet-infra")
+include("my-pet-core-infra")
