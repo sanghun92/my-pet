@@ -743,7 +743,7 @@ Location: v1/member/1</code></pre>
 <h4 id="Member-인증_curl_request"><a class="link" href="#Member-인증_curl_request">Curl request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/members/certification?code=b21ae760-7749-48c4-84e1-5e84b926d9f8' -i -X GET \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/members/certification?code=f88fefc2-d1fa-456a-a425-acb5094f2b9a' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -H 'Accept: application/json'</code></pre>
 </div>
@@ -774,7 +774,7 @@ Location: v1/member/1</code></pre>
 <h4 id="Member-인증_http_request"><a class="link" href="#Member-인증_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/members/certification?code=b21ae760-7749-48c4-84e1-5e84b926d9f8 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/members/certification?code=f88fefc2-d1fa-456a-a425-acb5094f2b9a HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -876,7 +876,7 @@ Content-Type: application/json
 Content-Length: 241
 
 {
-  "timestamp" : "2023-03-09T03:43:23.895273",
+  "timestamp" : "2023-03-09T04:09:14.134543",
   "type" : "OK",
   "data" : {
     "token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8"
@@ -899,7 +899,7 @@ Content-Length: 241
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/pets' -i -X POST \
     -H 'Content-Type: multipart/mixed;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAxMDA0LCJleHAiOjE2NzgzMDQ2MDR9.KzAJQaKBIE1BRKwKj1uTOd2ve3z-s_2wW5RAr-l00iE' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAyNTU0LCJleHAiOjE2NzgzMDYxNTR9.P5uQAVMZm24AvdVQNDi5rKkGgZRHU8Khh8YVMlj3dW8' \
     -F 'petImage=@coffee_sample.jpg;type=multipart/form-data' \
     -F 'request=@request;type=application/json'</code></pre>
 </div>
@@ -1001,7 +1001,7 @@ Content-Length: 241
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /v1/pets HTTP/1.1
 Content-Type: multipart/mixed;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAxMDA0LCJleHAiOjE2NzgzMDQ2MDR9.KzAJQaKBIE1BRKwKj1uTOd2ve3z-s_2wW5RAr-l00iE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAyNTU0LCJleHAiOjE2NzgzMDYxNTR9.P5uQAVMZm24AvdVQNDi5rKkGgZRHU8Khh8YVMlj3dW8
 Host: localhost:8080
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -1057,7 +1057,7 @@ Location: v1/pet/mine</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/v1/pets/mine' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAxMDA0LCJleHAiOjE2NzgzMDQ2MDR9.KzAJQaKBIE1BRKwKj1uTOd2ve3z-s_2wW5RAr-l00iE' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAyNTU0LCJleHAiOjE2NzgzMDYxNTR9.P5uQAVMZm24AvdVQNDi5rKkGgZRHU8Khh8YVMlj3dW8' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
@@ -1089,7 +1089,7 @@ Location: v1/pet/mine</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /v1/pets/mine HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAxMDA0LCJleHAiOjE2NzgzMDQ2MDR9.KzAJQaKBIE1BRKwKj1uTOd2ve3z-s_2wW5RAr-l00iE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc4MzAyNTU0LCJleHAiOjE2NzgzMDYxNTR9.P5uQAVMZm24AvdVQNDi5rKkGgZRHU8Khh8YVMlj3dW8
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1182,10 +1182,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 320
+Content-Length: 335
 
 {
-  "timestamp" : "2023-03-09T03:43:24.456329",
+  "timestamp" : "2023-03-09T04:09:14.594812",
   "type" : "OK",
   "data" : {
     "id" : 1,
@@ -1193,7 +1193,7 @@ Content-Length: 320
       "type" : "CAT",
       "name" : "샴"
     },
-    "petImageUrl" : "test",
+    "petImageUrl" : "/v1/pets/1/images/1",
     "petName" : "루루",
     "birthDay" : "2023-03-09",
     "gender" : "MALE",

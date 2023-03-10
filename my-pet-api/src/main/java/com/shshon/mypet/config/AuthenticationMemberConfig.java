@@ -1,6 +1,6 @@
 package com.shshon.mypet.config;
 
-import com.shshon.mypet.advice.requestDecorator.AuthenticationPrincipalArgumentResolver;
+import com.shshon.mypet.advice.requestDecorator.AuthenticationMemberArgumentResolver;
 import com.shshon.mypet.auth.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +12,11 @@ import java.util.List;
 
 @Configuration
 @Profile("!test")
-public class AuthenticationPrincipalConfig implements WebMvcConfigurer {
+public class AuthenticationMemberConfig implements WebMvcConfigurer {
 
     private final AuthService authService;
 
-    public AuthenticationPrincipalConfig(AuthService authService) {
+    public AuthenticationMemberConfig(AuthService authService) {
         this.authService = authService;
     }
 
@@ -26,7 +26,7 @@ public class AuthenticationPrincipalConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public AuthenticationPrincipalArgumentResolver createAuthenticationPrincipalArgumentResolver() {
-        return new AuthenticationPrincipalArgumentResolver(authService);
+    public AuthenticationMemberArgumentResolver createAuthenticationPrincipalArgumentResolver() {
+        return new AuthenticationMemberArgumentResolver(authService);
     }
 }

@@ -2,6 +2,8 @@ package com.shshon.mypet.advice.responseDecorator;
 
 import com.shshon.mypet.endpoint.v1.ApiResponseV1;
 import com.shshon.mypet.endpoint.v1.ResponseV1;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -12,6 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+
+import static com.shshon.mypet.advice.errorHandler.ApiV1ExceptionHandler.getRequestURI;
+import static com.shshon.mypet.advice.errorHandler.ApiV1ExceptionHandler.getStatus;
 
 @RestControllerAdvice
 public class V1ResponseDecorator implements ResponseBodyAdvice<Object> {

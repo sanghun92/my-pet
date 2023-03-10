@@ -23,8 +23,7 @@ public class V1BindExceptionHandler implements ApiV1ExceptionHandler {
 
     @Override
     public ResponseEntity<ErrorResponseV1> onException(HttpServletRequest request, Exception exception) {
-        log.error("Bind exception: {}", getRequestURI(request), exception);
-
+        ApiV1ExceptionHandler.requestLog(log, request, HttpStatus.BAD_REQUEST, exception);
         BindException bindEx = (BindException) exception;
         List<String> messages = bindEx.getBindingResult()
                 .getFieldErrors()

@@ -1,6 +1,6 @@
 package com.shshon.mypet.endpoint.v1.petcategory;
 
-import com.shshon.mypet.endpoint.v1.pet.response.PetCategoryResponse;
+import com.shshon.mypet.endpoint.v1.petcategory.response.PetCategoryResponse;
 import com.shshon.mypet.pet.domain.PetType;
 import com.shshon.mypet.petcategory.dto.PetCategoryDto;
 import com.shshon.mypet.petcategory.service.PetCategoryQueryService;

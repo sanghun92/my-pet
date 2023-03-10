@@ -1,6 +1,6 @@
 package com.shshon.mypet.config;
 
-import com.shshon.mypet.advice.requestDecorator.AuthenticationPrincipalArgumentResolver;
+import com.shshon.mypet.advice.requestDecorator.AuthenticationMemberArgumentResolver;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.auth.service.AuthService;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @TestConfiguration
-public class AuthenticationPrincipalTestConfig implements WebMvcConfigurer {
+public class AuthenticationMemberTestConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -19,8 +19,8 @@ public class AuthenticationPrincipalTestConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public AuthenticationPrincipalArgumentResolver createAuthenticationPrincipalArgumentResolver() {
-        return new AuthenticationPrincipalArgumentResolver(new AuthServiceStub());
+    public AuthenticationMemberArgumentResolver createAuthenticationPrincipalArgumentResolver() {
+        return new AuthenticationMemberArgumentResolver(new AuthServiceStub());
     }
 
     private static class AuthServiceStub extends AuthService {

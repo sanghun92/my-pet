@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberRegisterController.class)
-class MemberRegisterApiDocumentationTest extends ApiDocumentationTest {
+class MemberRegisterControllerDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
     private MemberRegisterService memberRegisterService;

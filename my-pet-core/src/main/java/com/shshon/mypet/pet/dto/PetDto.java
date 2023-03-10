@@ -32,20 +32,6 @@ public record PetDto(Long id,
                 .build();
     }
 
-    /*public static PetDto from(PetDto petDto, ImageMetaDataDto imageMetaDataDto) {
-        return PetDto.builder()
-                .id(petDto.id())
-                .memberId(petDto.memberId())
-                .category((petDto.category()))
-                .petImage(imageMetaDataDto)
-                .name(petDto.name())
-                .birthDay(petDto.birthDay())
-                .gender(petDto.gender())
-                .bodyWeight(petDto.bodyWeight())
-                .bodyType(petDto.bodyType())
-                .build();
-    }*/
-
     public Pet toEntity() {
         return Pet.builder()
                 .memberId(memberId)

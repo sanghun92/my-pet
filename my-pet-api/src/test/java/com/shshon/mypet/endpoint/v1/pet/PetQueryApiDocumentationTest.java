@@ -2,7 +2,6 @@ package com.shshon.mypet.endpoint.v1.pet;
 
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.docs.util.DocumentLinkGenerator;
-import com.shshon.mypet.docs.util.DocumentLinkGenerator.DocUrl;
 import com.shshon.mypet.image.domain.ImageMetaData;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
@@ -30,7 +29,6 @@ import static com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor.AUTHORIZA
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;

@@ -5,19 +5,19 @@ import com.shshon.mypet.endpoint.v1.ApiResponseV1;
 import com.shshon.mypet.endpoint.v1.ErrorResponseV1;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RestControllerAdvice
+@RequestMapping("/error")
 @Slf4j
 public class V1ExceptionResponseDecorator implements ErrorController {
 
@@ -30,19 +30,37 @@ public class V1ExceptionResponseDecorator implements ErrorController {
         this.exceptionHandlers = exceptionHandlers;
     }
 
-    @RequestMapping("/error")
+    @GetMapping
     public ResponseEntity<ErrorResponseV1> handleError(HttpServletRequest request) {
         Object exception = request.getAttribute(SERVLET_EXCEPTION);
         if(exception instanceof Exception) {
-            return onError(request, (Exception) exception);
+            return handleException(request, (Exception) exception);
         }
 
-        log.error("unhandled servlet exception : {}?{}", request.getRequestURI(), request.getQueryString());
-        return new ResponseEntity<>(ApiResponseV1.serverError("unhandled exception"), HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus status = ApiV1ExceptionHandler.getStatus(request);
+        return new ResponseEntity<>(ApiResponseV1.serverError("unhandled exception"), status);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseV1> handleAuthenticationException(HttpServletRequest request,
+                                                                         AuthenticationException ex) {
+        ApiV1ExceptionHandler.requestLog(log, request, ex);
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        ErrorResponseV1 response = ApiResponseV1.unauthorized(ex.getMessage());
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponseV1> handleHttpMediaTypeNotSupportedException(HttpServletRequest request,
+                                                                                    HttpMediaTypeNotSupportedException ex) {
+        ApiV1ExceptionHandler.requestLog(log, request, ex);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
+        return new ResponseEntity<>(response, httpStatus);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseV1> onError(HttpServletRequest request, Exception exception) {
+    public ResponseEntity<ErrorResponseV1> handleException(HttpServletRequest request, Exception exception) {
         return this.exceptionHandlers.stream()
                 .filter(handler -> handler.support(exception))
                 .findFirst()

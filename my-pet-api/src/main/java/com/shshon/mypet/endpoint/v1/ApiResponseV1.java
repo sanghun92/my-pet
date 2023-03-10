@@ -30,6 +30,10 @@ public abstract class ApiResponseV1<T> {
         return ErrorResponseV1.from(HttpStatus.BAD_REQUEST.value(), message);
     }
 
+    public static ErrorResponseV1 unauthorized(String message) {
+        return ErrorResponseV1.from(HttpStatus.UNAUTHORIZED.value(), message);
+    }
+
     public static ErrorResponseV1 serverError(String message) {
         return ErrorResponseV1.from(HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
     }

@@ -1,7 +1,7 @@
 package com.shshon.mypet.endpoint.v1.pet;
 
 import com.shshon.mypet.mapper.image.ImageDtoMapper;
-import com.shshon.mypet.auth.domain.AuthenticationPrincipal;
+import com.shshon.mypet.auth.domain.AuthenticationMember;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.endpoint.v1.pet.request.PetRegisterRequest;
 import com.shshon.mypet.pet.service.PetRegisterService;
@@ -30,7 +30,7 @@ public class PetServiceController {
 
     @PostMapping(value = PetPaths.REGISTER_MY_PET,
             consumes = { MediaType.MULTIPART_MIXED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> registerMyPet(@AuthenticationPrincipal LoginMember member,
+    public ResponseEntity<?> registerMyPet(@AuthenticationMember LoginMember member,
                                            @RequestPart(value = "request") @Valid PetRegisterRequest request,
                                            @RequestPart(value = "petImage", required = false) MultipartFile petImage) {
         petRegisterService.registerMyPet(

@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1.pet.response;
+package com.shshon.mypet.endpoint.v1.petcategory.response;
 
 import com.shshon.mypet.endpoint.v1.ResponseV1;
 import com.shshon.mypet.pet.domain.PetType;

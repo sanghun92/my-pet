@@ -1,6 +1,8 @@
 package com.shshon.mypet.endpoint.v1.pet.response;
 
 import com.shshon.mypet.endpoint.v1.ResponseV1;
+import com.shshon.mypet.endpoint.v1.pet.PetPaths;
+import com.shshon.mypet.endpoint.v1.petcategory.response.PetCategoryResponse;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.dto.PetDto;
@@ -8,6 +10,7 @@ import com.shshon.mypet.pet.dto.PetImageDto;
 import com.shshon.mypet.petcategory.dto.PetCategoryDto;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 
@@ -29,7 +32,7 @@ public class PetResponse {
         return PetResponse.builder()
                 .id(pet.id())
                 .category(PetCategoryResponse.from(petCategoryDto))
-                .petImageUrl(toPetImageUrl(pet.petImage()))
+                .petImageUrl(toPetImageUrl(pet.id(), pet.petImage()))
                 .petName(pet.name())
                 .birthDay(pet.birthDay())
                 .gender(pet.gender())
@@ -38,11 +41,13 @@ public class PetResponse {
                 .build();
     }
 
-    private static String toPetImageUrl(PetImageDto petImage) {
+    private static String toPetImageUrl(Long petId, PetImageDto petImage) {
         if(petImage == null) {
             return null;
         }
 
-        return "test";
+        return UriComponentsBuilder.fromPath(PetPaths.FIND_PET_IMAGE)
+                .build(petId)
+                .toString();
     }
 }

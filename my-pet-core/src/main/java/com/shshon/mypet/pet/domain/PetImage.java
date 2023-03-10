@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,5 +35,30 @@ public class PetImage {
         this.pet = pet;
         this.imageMetaData = imageMetaData;
         this.contents = contents;
+    }
+
+    public byte[] getContentBytes() {
+        if(this.contents == null) {
+            return new byte[0];
+        }
+
+        try {
+            return this.contents.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PetImage petImage = (PetImage) o;
+        return Objects.equals(id, petImage.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

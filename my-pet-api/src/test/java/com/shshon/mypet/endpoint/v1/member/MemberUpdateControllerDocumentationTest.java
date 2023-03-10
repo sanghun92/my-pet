@@ -21,7 +21,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberUpdateController.class)
-class MemberUpdateApiDocumentationTest extends ApiDocumentationTest {
+class MemberUpdateControllerDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
     private MemberUpdateService memberUpdateService;
