@@ -13,3 +13,8 @@ spring:
         - infra
         - security
         - aws
+      dev:
+        - db
+        - infra
+        - security
+        - aws
