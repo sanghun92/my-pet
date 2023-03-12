@@ -14,7 +14,7 @@ SHELL_SCRIPT_PATH=$(dirname $0)
 PROJECT_NAME="my-pet"
 PROFILE="dev"
 REPOSITORY="/home/ubuntu/project/deploy"
-APP_BUILD_PATH="$REPOSITORY/my-pet-api/build/libs"
+APP_BUILD_PATH="$REPOSITORY/build/libs"
 
 function build() {
   cd ${REPOSITORY}

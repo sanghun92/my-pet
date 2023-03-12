@@ -35,13 +35,12 @@ jobs:
 
       - name: Make zip file
         run: |
-          mkdir -p before-deploy/
-          cp appspec.yml before-deploy/
-          cp scripts/*.sh before-deploy/
-          cp my-pet-api/build/libs/*.jar before-deploy/
-          cd before-deploy && zip -r before-deploy *
-          cd ../ && mkdir -p deploy
-          mv before-deploy/before-deploy.zip deploy/$GITHUB_SHA.zip
+          mkdir -p deploy/
+          cp appspec.yml deploy/
+          cp -r scripts deploy/scripts/
+          mkdir -p deploy/build
+          cp my-pet-api/build/libs/*.jar deploy/build/
+          cd deploy && zip -r $GITHUB_SHA.zip *
         shell: bash
 
       - name: Configure AWS credentials
@@ -52,7 +51,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.AWS_DEPLOY_BUCKET }}/$GITHUB_SHA.zip
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./deploy/$GITHUB_SHA.zip s3://${{ secrets.AWS_DEPLOY_BUCKET }}/$GITHUB_SHA.zip
 
       - name: Code Deploy
         run: | 
