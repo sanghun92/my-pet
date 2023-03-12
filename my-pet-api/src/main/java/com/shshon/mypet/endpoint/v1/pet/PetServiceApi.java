@@ -1,9 +1,9 @@
 package com.shshon.mypet.endpoint.v1.pet;
 
-import com.shshon.mypet.mapper.image.ImageDtoMapper;
 import com.shshon.mypet.auth.domain.AuthenticationMember;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.endpoint.v1.pet.request.PetRegisterRequest;
+import com.shshon.mypet.mapper.image.ImageDtoMapper;
 import com.shshon.mypet.pet.service.PetRegisterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +23,19 @@ import java.net.URI;
         consumes = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class PetServiceController {
+public class PetServiceApi {
 
     private final PetRegisterService petRegisterService;
     private final ImageDtoMapper imageDtoMapper;
 
-    @PostMapping(value = PetPaths.REGISTER_MY_PET,
+    @PostMapping(value = "/v1/pets",
             consumes = { MediaType.MULTIPART_MIXED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> registerMyPet(@AuthenticationMember LoginMember member,
                                            @RequestPart(value = "request") @Valid PetRegisterRequest request,
                                            @RequestPart(value = "petImage", required = false) MultipartFile petImage) {
         petRegisterService.registerMyPet(
-                member.getId(),
-                request.getCategoryId(),
+                member.id(),
+                request.categoryId(),
                 request.toMyPetDto(),
                 imageDtoMapper.toImageMetaData(petImage)
         );

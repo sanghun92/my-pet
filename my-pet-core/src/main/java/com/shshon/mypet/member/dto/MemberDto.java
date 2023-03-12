@@ -1,27 +1,22 @@
 package com.shshon.mypet.member.dto;
 
 import com.shshon.mypet.member.domain.Member;
+import com.shshon.mypet.member.domain.MemberCertification;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
+@Builder
 public class MemberDto {
 
     private final Long id;
     private final String email;
     private final String password;
     private final String nickname;
-
-    @Builder
-    public MemberDto(Long id,
-                     String email,
-                     String password,
-                     String nickname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-    }
+    private final LocalDate birthDay;
+    private final String phoneNumber;
 
     public static MemberDto from(Member member) {
         return MemberDto.builder()
@@ -32,11 +27,14 @@ public class MemberDto {
     }
 
     public Member toMember() {
-        return Member.createMember(
-                this.email,
-                this.password,
-                this.nickname
-        );
+        return Member.builder()
+                .email(this.email)
+                .password(this.password)
+                .nickname(this.nickname)
+                .certification(MemberCertification.randomCode())
+                .birthDay(this.birthDay)
+                .phoneNumber(this.phoneNumber)
+                .build();
     }
 
     @Override

@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
 )
-public class AuthController {
+public class AuthApi {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
+    public AuthApi(AuthService authService) {
         this.authService = authService;
     }
 
-    @PostMapping(AuthPaths.LOGIN)
+    @PostMapping("/v1/auth/login")
     public TokenResponse login(@RequestBody @Valid LoginMemberRequest request) {
-        TokenDto tokenDto = authService.login(request.getEmail(), request.getPassword());
+        TokenDto tokenDto = authService.login(request.email(), request.password());
         return TokenResponse.of(tokenDto);
     }
 }

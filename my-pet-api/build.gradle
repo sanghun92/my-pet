@@ -56,21 +56,24 @@ asciidoctor.doFirst {
 }
 
 tasks.register('copyDocument', Copy) {
-    dependsOn bootJar
+    dependsOn asciidoctor
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }
 
 bootJar {
     enabled = true
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}") {
+        duplicatesStrategy = 'include'
         into 'BOOT-INF/classes/static/docs'
     }
 }
 
-jar { enabled = false }
-
-build {
-    dependsOn copyDocument
+jar {
+    enabled = false
 }

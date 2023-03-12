@@ -1,14 +1,5 @@
 version: "3.9"
 services:
-  proxy:
-    image: nginx:latest
-    container_name: proxy
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ~/project/nginx.conf:/etc/nginx/nginx.conf
   db:
     image: mysql:8.0
     container_name: my-pet-db

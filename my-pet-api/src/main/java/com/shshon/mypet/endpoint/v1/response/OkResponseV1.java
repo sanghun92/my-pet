@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1;
+package com.shshon.mypet.endpoint.v1.response;
 
 import lombok.Getter;
 
@@ -6,11 +6,11 @@ import lombok.Getter;
 public class OkResponseV1<T> extends ApiResponseV1<T> {
 
     protected OkResponseV1() {
-        super(Type.OK, null);
+        super(true, null);
     }
 
     protected OkResponseV1(T body) {
-        super(Type.OK, body);
+        super(true, body);
     }
 
     public static <T> ApiResponseV1<T> of(T body) {

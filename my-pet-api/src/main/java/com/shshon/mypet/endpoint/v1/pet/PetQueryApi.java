@@ -22,19 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class PetQueryController {
+public class PetQueryApi {
 
     private final PetQueryService petQueryService;
     private final PetCategoryQueryService petCategoryQueryService;
 
-    @GetMapping(PetPaths.FIND_MY_PET)
+    @GetMapping("/v1/pets/mine")
     public PetResponse findMyPet(@AuthenticationMember LoginMember member) {
-        PetDto pet = petQueryService.findMyPet(member.getId());
+        PetDto pet = petQueryService.findMyPet(member.id());
         PetCategoryDto petCategoryDto = petCategoryQueryService.findById(pet.categoryId());
         return PetResponse.from(pet, petCategoryDto);
     }
 
-    @GetMapping(value = PetPaths.FIND_PET_IMAGE,
+    @GetMapping(value = "/v1/pets/{petId}/images",
             produces = { MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public PetImageResponse findPetImage(@PathVariable("petId") Long petId) {
         PetImageDto imageDto = petQueryService.findPetImage(petId);

@@ -4,54 +4,53 @@ import com.shshon.mypet.common.domain.BaseTimeEntity;
 import com.shshon.mypet.member.exception.AuthorizationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
     @Column(length = 50, nullable = false, unique = true)
-    @Getter
     private String email;
 
     @Embedded
     private Password password;
 
     @Column(length = 30, nullable = false)
-    @Getter
     private String nickname;
 
     @Embedded
     private MemberCertification certification;
 
-    private Member(String email,
-                   Password password,
+    private LocalDate birthDay;
+
+    @Column(length = 13)
+    private String phoneNumber;
+
+    @Builder
+    public Member(String email,
+                   String password,
                    String nickname,
-                   MemberCertification certification) {
+                   MemberCertification certification,
+                   LocalDate birthDay,
+                   String phoneNumber) {
         this.email = email;
-        this.password = password;
+        this.password = Password.of(password);
         this.nickname = nickname;
         this.certification = certification;
-    }
-
-    public static Member createMember(String email,
-                                      String password,
-                                      String nickname) {
-        return new Member(
-                email,
-                Password.of(password),
-                nickname,
-                MemberCertification.randomCode()
-        );
+        this.birthDay = birthDay;
+        this.phoneNumber = phoneNumber;
     }
 
     public void authenticate(String password) {
@@ -60,7 +59,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    public String getCertificationCode() {
+    public String getCertification() {
         return this.certification.getCode();
     }
 
@@ -70,6 +69,10 @@ public class Member extends BaseTimeEntity {
 
     public void onCertificate() {
         this.certification = this.certification.onCertificate();
+    }
+
+    public void changePassword(String password) {
+        this.password = Password.of(password);
     }
 
     @Override

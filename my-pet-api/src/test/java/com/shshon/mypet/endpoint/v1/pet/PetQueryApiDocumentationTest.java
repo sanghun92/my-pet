@@ -3,6 +3,7 @@ package com.shshon.mypet.endpoint.v1.pet;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.docs.util.DocumentLinkGenerator;
 import com.shshon.mypet.image.domain.ImageMetaData;
+import com.shshon.mypet.paths.PetPaths;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.domain.PetType;
@@ -34,7 +35,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PetQueryController.class)
+@WebMvcTest(PetQueryApi.class)
 class PetQueryApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean

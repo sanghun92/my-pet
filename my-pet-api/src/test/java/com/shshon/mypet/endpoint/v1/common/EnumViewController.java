@@ -1,7 +1,7 @@
 package com.shshon.mypet.endpoint.v1.common;
 
 import com.shshon.mypet.common.domain.EnumType;
-import com.shshon.mypet.endpoint.v1.ApiResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.domain.PetType;

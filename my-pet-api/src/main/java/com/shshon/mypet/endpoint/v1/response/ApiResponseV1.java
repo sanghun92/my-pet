@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1;
+package com.shshon.mypet.endpoint.v1.response;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -10,11 +10,11 @@ import java.util.List;
 public abstract class ApiResponseV1<T> {
 
     private final LocalDateTime timestamp = LocalDateTime.now();
-    private final Type type;
+    private final boolean success;
     private final T data;
 
-    public ApiResponseV1(Type type, T data) {
-        this.type = type;
+    public ApiResponseV1(boolean success, T data) {
+        this.success = success;
         this.data = data;
     }
 
@@ -36,20 +36,5 @@ public abstract class ApiResponseV1<T> {
 
     public static ErrorResponseV1 serverError(String message) {
         return ErrorResponseV1.from(HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
-    }
-
-    protected enum Type {
-        OK("OK"),
-        ERROR("ERROR");
-
-        private final String value;
-
-        Type(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return this.value;
-        }
     }
 }

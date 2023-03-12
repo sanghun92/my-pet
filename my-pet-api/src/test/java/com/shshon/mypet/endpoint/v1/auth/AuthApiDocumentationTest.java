@@ -5,6 +5,7 @@ import com.shshon.mypet.auth.service.AuthService;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,8 +23,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
-class AuthControllerDocumentationTest extends ApiDocumentationTest {
+@WebMvcTest(AuthApi.class)
+class AuthApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
     private AuthService authService;

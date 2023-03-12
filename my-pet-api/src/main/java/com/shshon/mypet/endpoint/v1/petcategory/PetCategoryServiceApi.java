@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.*;
         consumes = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class PetCategoryServiceController {
+public class PetCategoryServiceApi {
 
     private final PetCategoryRegisterService petCategoryRegisterService;
 
-    @PostMapping(PetCategoryPaths.REGISTER_PARENT_PET_CATEGORY)
+    @PostMapping("/v1/pets/category")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerParentPetCategory(ParentPetCategoryRegisterRequest request) {
         petCategoryRegisterService.registerParentPetCategory(request.toDto());
     }
 
-    @PostMapping(PetCategoryPaths.REGISTER_CHILD_PET_CATEGORY)
+    @PostMapping("/v1/pets/category/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerChildPetCategory(@PathVariable("id") Long parentId, String childPetCategoryName) {
         petCategoryRegisterService.registerChildPetCategory(parentId, childPetCategoryName);

@@ -10,41 +10,38 @@ import com.shshon.mypet.pet.dto.PetDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Getter
 @Builder
-@JsonDeserialize(builder = PetRegisterRequest.PetRegisterRequestBuilder.class)
-public class PetRegisterRequest {
+public record PetRegisterRequest (
 
     @JsonProperty("categoryId")
     @NotNull(message = "반려동물 타입은 필수값 입니다.")
-    private final Long categoryId;
+    Long categoryId,
 
     @JsonProperty("name")
     @NotEmpty(message = "반려동물 이름은 필수값 입니다.")
-    private final String name;
+    String name,
 
     @JsonProperty("birthDay")
     @NotNull(message = "반려동물 생일은 필수값 입니다.")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private final LocalDate birthDay;
+    LocalDate birthDay,
 
     @JsonProperty("gender")
     @NotEmpty(message = "반려동물 성별은 필수값 입니다.")
-    private final String gender;
+    String gender,
 
     @JsonProperty("bodyWeight")
     @NotNull(message = "반려동물 몸무게는 필수값 입니다.")
-    private final Integer bodyWeight;
+    Integer bodyWeight,
 
     @JsonProperty("bodyType")
     @NotEmpty(message = "반려동물 체형 타입은 필수값 입니다.")
-    private final String bodyType;
-
+    String bodyType
+) {
     public PetDto toMyPetDto() {
         return PetDto.builder()
                 .name(this.name)

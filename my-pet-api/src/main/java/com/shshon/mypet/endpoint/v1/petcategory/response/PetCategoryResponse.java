@@ -1,22 +1,19 @@
 package com.shshon.mypet.endpoint.v1.petcategory.response;
 
-import com.shshon.mypet.endpoint.v1.ResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ResponseV1;
 import com.shshon.mypet.pet.domain.PetType;
 import com.shshon.mypet.petcategory.dto.PetCategoryDto;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ResponseV1
 @Builder
-@Getter
-public class PetCategoryResponse {
-
-    private final PetType type;
-    private final String name;
-
+public record PetCategoryResponse(
+    PetType type,
+    String name
+) {
     public static PetCategoryResponse from(PetCategoryDto petCategory) {
         return PetCategoryResponse.builder()
                 .type(petCategory.type())

@@ -1,6 +1,6 @@
 package com.shshon.mypet.advice.errorHandler;
 
-import com.shshon.mypet.endpoint.v1.ErrorResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ErrorResponseV1;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;

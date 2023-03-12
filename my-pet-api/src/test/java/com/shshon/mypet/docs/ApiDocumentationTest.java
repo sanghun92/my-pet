@@ -2,6 +2,7 @@ package com.shshon.mypet.docs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shshon.mypet.advice.errorHandler.V1BindExceptionHandler;
 import com.shshon.mypet.auth.infra.JwtTokenProvider;
 import com.shshon.mypet.auth.infra.JwtTokenProviderImpl;
 import com.shshon.mypet.config.AuthenticationMemberTestConfig;
@@ -20,7 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @EnableConfigurationProperties(TokenProperties.class)
-@Import({ AuthenticationMemberTestConfig.class,
+@Import({
+        V1BindExceptionHandler.class,
+        AuthenticationMemberTestConfig.class,
         JwtTokenProviderImpl.class
 })
 @WebMvcTest

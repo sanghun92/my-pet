@@ -1,7 +1,7 @@
 package com.shshon.mypet.advice.errorHandler;
 
-import com.shshon.mypet.endpoint.v1.ApiResponseV1;
-import com.shshon.mypet.endpoint.v1.ErrorResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ErrorResponseV1;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

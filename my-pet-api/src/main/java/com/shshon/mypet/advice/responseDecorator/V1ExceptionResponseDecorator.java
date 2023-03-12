@@ -1,8 +1,8 @@
 package com.shshon.mypet.advice.responseDecorator;
 
 import com.shshon.mypet.advice.errorHandler.ApiV1ExceptionHandler;
-import com.shshon.mypet.endpoint.v1.ApiResponseV1;
-import com.shshon.mypet.endpoint.v1.ErrorResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ErrorResponseV1;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,6 +54,15 @@ public class V1ExceptionResponseDecorator implements ErrorController {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<ErrorResponseV1> handleHttpMediaTypeNotSupportedException(HttpServletRequest request,
                                                                                     HttpMediaTypeNotSupportedException ex) {
+        ApiV1ExceptionHandler.requestLog(log, request, ex);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseV1> handleHttpRequestMethodNotSupportedException(HttpServletRequest request,
+                                                                                        HttpRequestMethodNotSupportedException ex) {
         ApiV1ExceptionHandler.requestLog(log, request, ex);
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());

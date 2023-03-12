@@ -19,11 +19,11 @@ import java.util.List;
         consumes = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class PetCategoryQueryController {
+public class PetCategoryQueryApi {
 
     private final PetCategoryQueryService petCategoryQueryService;
 
-    @GetMapping(PetCategoryPaths.FIND_PET_CATEGORY)
+    @GetMapping("/v1/pets/category")
     public List<PetCategoryResponse> findPetCategoryByPetType(@RequestParam("petType") PetType type) {
         List<PetCategoryDto> petCategories = petCategoryQueryService.findPetCategoryByPetType(type);
         return PetCategoryResponse.from(petCategories);

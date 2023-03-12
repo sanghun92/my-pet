@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1;
+package com.shshon.mypet.endpoint.v1.response;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

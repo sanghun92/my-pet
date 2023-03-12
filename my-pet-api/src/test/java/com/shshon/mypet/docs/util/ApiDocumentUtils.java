@@ -11,7 +11,11 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 public interface ApiDocumentUtils {
 
     static OperationRequestPreprocessor getDocumentRequest() {
-        return preprocessRequest(prettyPrint());
+        return preprocessRequest(
+                modifyUris().scheme("http")
+                        .host("my-pet.o-r.kr")
+                        .removePort()
+                , prettyPrint());
     }
 
     static OperationResponsePreprocessor getDocumentResponse() {

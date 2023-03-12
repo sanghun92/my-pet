@@ -5,6 +5,7 @@ import com.shshon.mypet.docs.util.DocumentLinkGenerator;
 import com.shshon.mypet.endpoint.v1.pet.request.PetRegisterRequest;
 import com.shshon.mypet.image.dto.ImageDto;
 import com.shshon.mypet.mapper.image.ImageDtoMapper;
+import com.shshon.mypet.paths.PetPaths;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.dto.PetDto;
@@ -39,7 +40,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PetServiceController.class)
+@WebMvcTest(PetServiceApi.class)
 class PetServiceApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean

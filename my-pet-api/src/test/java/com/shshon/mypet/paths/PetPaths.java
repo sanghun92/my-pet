@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1.pet;
+package com.shshon.mypet.paths;
 
 public abstract class PetPaths {
 

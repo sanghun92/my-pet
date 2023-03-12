@@ -2,7 +2,7 @@ package com.shshon.mypet.docs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.shshon.mypet.docs.snippet.CustomResponseFieldsSnippet;
-import com.shshon.mypet.endpoint.v1.OkResponseV1;
+import com.shshon.mypet.endpoint.v1.response.OkResponseV1;
 import com.shshon.mypet.endpoint.v1.common.Docs;
 import com.shshon.mypet.endpoint.v1.common.EnumViewController;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class CommonDocumentationTest extends ApiDocumentationTest {
                 .andDo(document("common",
                         responseFields(
                             attributes(key("title").value("공통 응답")),
-                            fieldWithPath("type").type(JsonFieldType.STRING).description("응답 여부"),
+                            fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                             fieldWithPath("timestamp").type(JsonFieldType.STRING).description("응답 일자"),
                             subsectionWithPath("data").type(JsonFieldType.OBJECT).description("데이터").optional()
                         ),

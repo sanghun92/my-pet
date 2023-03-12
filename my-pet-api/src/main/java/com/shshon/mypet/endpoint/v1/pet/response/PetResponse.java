@@ -1,32 +1,30 @@
 package com.shshon.mypet.endpoint.v1.pet.response;
 
-import com.shshon.mypet.endpoint.v1.ResponseV1;
-import com.shshon.mypet.endpoint.v1.pet.PetPaths;
 import com.shshon.mypet.endpoint.v1.petcategory.response.PetCategoryResponse;
+import com.shshon.mypet.endpoint.v1.response.ResponseV1;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.dto.PetDto;
 import com.shshon.mypet.pet.dto.PetImageDto;
 import com.shshon.mypet.petcategory.dto.PetCategoryDto;
 import lombok.Builder;
-import lombok.Getter;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 
 @ResponseV1
 @Builder
-@Getter
-public class PetResponse {
+public record PetResponse (
 
-    private final Long id;
-    private final PetCategoryResponse category;
-    private final String petImageUrl;
-    private final String petName;
-    private final LocalDate birthDay;
-    private final PetGender gender;
-    private final Integer bodyWeight;
-    private final PetBodyType bodyType;
+    Long id,
+    PetCategoryResponse category,
+    String petImageUrl,
+    String petName,
+    LocalDate birthDay,
+    PetGender gender,
+    Integer bodyWeight,
+    PetBodyType bodyType
+) {
 
     public static PetResponse from(PetDto pet, PetCategoryDto petCategoryDto) {
         return PetResponse.builder()
@@ -46,7 +44,7 @@ public class PetResponse {
             return null;
         }
 
-        return UriComponentsBuilder.fromPath(PetPaths.FIND_PET_IMAGE)
+        return UriComponentsBuilder.fromPath("/v1/pets/{petId}/images")
                 .build(petId)
                 .toString();
     }

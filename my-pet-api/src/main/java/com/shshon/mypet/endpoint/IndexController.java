@@ -1,9 +1,6 @@
 package com.shshon.mypet.endpoint;
 
-import com.shshon.mypet.endpoint.v1.ApiResponseV1;
-import com.shshon.mypet.endpoint.v1.ErrorResponseV1;
-import com.shshon.mypet.endpoint.v1.OkResponseV1;
-import org.springframework.http.ResponseEntity;
+import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

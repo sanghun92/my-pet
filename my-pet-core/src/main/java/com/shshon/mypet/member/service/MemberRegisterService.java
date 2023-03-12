@@ -4,7 +4,6 @@ import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.domain.MemberRepository;
 import com.shshon.mypet.member.dto.MemberDto;
 import com.shshon.mypet.member.event.CreateMemberEvent;
-import com.shshon.mypet.member.event.MemberEventPublisher;
 import com.shshon.mypet.member.exception.InValidMemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,7 +26,7 @@ public class MemberRegisterService {
                         .id(member.getId())
                         .email(member.getEmail())
                         .nickname(member.getNickname())
-                        .certificationCode(member.getCertificationCode())
+                        .certificationCode(member.getCertification())
                         .build()
         );
         return MemberDto.from(member);
