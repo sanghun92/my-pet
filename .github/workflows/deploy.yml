@@ -39,6 +39,7 @@ jobs:
           cp appspec.yml deploy/
           cp -r scripts deploy/scripts/
           mkdir -p deploy/build
+          cp -r my-pet-api/build/docs deploy/build/
           cp my-pet-api/build/libs/*.jar deploy/build/
           cd deploy && zip -r $GITHUB_SHA.zip *
         shell: bash
