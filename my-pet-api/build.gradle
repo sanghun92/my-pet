@@ -51,19 +51,22 @@ asciidoctor {
     baseDirFollowsSourceFile()
 }
 
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
 tasks.register('copyDocument', Copy) {
-    dependsOn asciidoctor
-    doFirst {
-        delete file('src/main/resources/static/docs')
-    }
+    dependsOn bootJar
     from file("build/docs/asciidoc")
-    into file("build/resources/main/static/docs")
     into file("src/main/resources/static/docs")
 }
 
 bootJar {
     enabled = true
     dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'BOOT-INF/classes/static/docs'
+    }
 }
 
 jar { enabled = false }
