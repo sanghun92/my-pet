@@ -37,6 +37,7 @@ jobs:
         run: |
           mkdir -p deploy/
           zip -r $GITHUB_SHA.zip *
+          cp $GITHUB_SHA.zip deploy/
 #          cp appspec.yml deploy/
 #          cp -r scripts deploy/scripts/
 #          mkdir -p deploy/build
