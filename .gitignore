@@ -37,3 +37,6 @@ out/
 .vscode/
 
 BOOT-INF/
+
+### Spring REST DOCS
+/my-pet-api/src/main/resources/static/docs/

@@ -13,8 +13,9 @@ SHELL_SCRIPT_PATH=$(dirname $0)
 
 PROJECT_NAME="my-pet"
 PROFILE="dev"
-REPOSITORY="/home/ubuntu/project/deploy"
-APP_BUILD_PATH="$REPOSITORY/build/libs"
+PROJECT_HOME="/home/ubuntu/project"
+REPOSITORY="$PROJECT_HOME/deploy"
+APP_BUILD_PATH="$REPOSITORY/build"
 
 function build() {
   cd ${REPOSITORY}
@@ -46,11 +47,11 @@ function releaseApplication() {
   local JAR_NAME=$(ls $APP_BUILD_PATH | grep 'my-pet' | tail -n 1)
   local JAR_PATH=$APP_BUILD_PATH/$JAR_NAME
   echo -e "${txtylw} >> Profile : $PROFILE${txtrst}"
-  echo -e "${txtylw} >> JAR : $jarName${txtrst}"
+  echo -e "${txtylw} >> JAR : $JAR_NAME${txtrst}"
 
   nohup java -jar \
     -Dspring.profiles.active=$PROFILE \
-    $JAR_PATH 1> app.log 2>&1  &
+    $JAR_PATH 1> $PROJECT_HOME/app.log 2>&1  &
   echo -e "${txtylw} >> [$(date)] Application 시작 완료${txtrst}"
 }
 

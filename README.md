@@ -8,14 +8,17 @@
 
 ### ✅ 기술 스택
 - Back-End
-  - Java17
-  - Spring Boot
-  - Spring Data JPA
+  - Java 17
+  - Spring Boot v3.0.2
+  - Spring Data JPA v3.0.1
 - Infra
   - AWS EC2
   - AWS RDS
+  - AWS S3
+  - AWS CodeDeploy
 - ETC
   - Spring Rest Docs
+  - GitHub Actions
 
 ### ✅ 아키텍쳐
 ![architecture](./docs/architecture.png)

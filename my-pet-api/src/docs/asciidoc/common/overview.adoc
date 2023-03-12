@@ -8,7 +8,7 @@
 | 환경 | Host
 
 | Beta
-| `Update 예정`
+| `https://my-pet.o-r.kr`
 
 | Production
 | `Update 예정`

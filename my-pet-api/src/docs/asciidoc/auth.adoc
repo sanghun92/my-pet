@@ -3,4 +3,4 @@
 
 [[Auth-로그인]]
 === 로그인
-operation::auth/member-login[snippets='curl-request,request-fields,http-request,response-fields,http-response']
+operation::auth/member-login[snippets='curl-request,request-fields,http-request,response-fields-data,http-response']
