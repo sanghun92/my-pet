@@ -1,25 +1,14 @@
 version: "3.9"
 services:
-  web-service:
-    image: ubuntu:latest
-    container_name: my-pet-web-service
+  proxy:
+    image: nginx:latest
+    container_name: proxy
     restart: always
-    stdin_open: true
-    tty: true
     ports:
-      - "18080:8080"
-      - "122:22"
+      - "80:80"
+      - "443:443"
     volumes:
-      - ~/dev/docker/volume/my-pet-web-service:/root/
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-        reservations:
-          cpus: '0.5'
-          memory: 500M
-
+      - ~/project/nginx.conf:/etc/nginx/nginx.conf
   db:
     image: mysql:8.0
     container_name: my-pet-db
