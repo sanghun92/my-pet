@@ -45,22 +45,10 @@ asciidoctor {
     configurations 'asciidoctorExt'
     dependsOn test
 
-    sources{
+    sources {
         include("**/index.adoc","**/common/*.adoc")
     }
     baseDirFollowsSourceFile()
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-bootJar {
-    enabled = true
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
 }
 
 tasks.register('copyDocument', Copy) {
@@ -69,11 +57,17 @@ tasks.register('copyDocument', Copy) {
         delete file('src/main/resources/static/docs')
     }
     from file("build/docs/asciidoc")
+    into file("build/resources/main/static/docs")
     into file("src/main/resources/static/docs")
 }
+
+bootJar {
+    enabled = true
+    dependsOn asciidoctor
+}
+
+jar { enabled = false }
 
 build {
     dependsOn copyDocument
 }
-
-jar { enabled = false }
