@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS members (
     certification_code BINARY(16) NOT NULL,
     certificated_at DATETIME(6),
     birth_day DATE,
+    phone_number VARCHAR(13),
     is_deleted BOOLEAN NOT NULL,
     deleted_at DATETIME(6),
     created_at DATETIME(6),

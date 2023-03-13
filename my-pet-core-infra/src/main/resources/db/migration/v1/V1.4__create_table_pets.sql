@@ -11,7 +11,7 @@ CREATE TABLE pets (
     created_at DATETIME(6),
     modified_at DATETIME(6),
     is_deleted BOOLEAN NOT NULL,
-    deletedAt DATETIME(6),
+    deleted_at DATETIME(6),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
