@@ -1,13 +1,14 @@
 package com.shshon.mypet.pet.domain;
 
 import com.shshon.mypet.common.domain.BaseTimeEntity;
+import com.shshon.mypet.common.domain.DeleteHistory;
+import com.shshon.mypet.common.domain.Deleteable;
 import com.shshon.mypet.image.domain.ImageMetaData;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
@@ -16,10 +17,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "pets")
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE pet SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Pet extends BaseTimeEntity {
+public class Pet extends BaseTimeEntity
+        implements Deleteable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +49,7 @@ public class Pet extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private PetBodyType bodyType;
 
-    private Boolean isDeleted = Boolean.FALSE;
+    private DeleteHistory deleteHistory = DeleteHistory.nonDeleted();
 
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private PetImage petImage;
@@ -80,6 +81,11 @@ public class Pet extends BaseTimeEntity {
     }
 
     @Override
+    public void delete() {
+        this.deleteHistory.writeDeleteHistory();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,7 +108,6 @@ public class Pet extends BaseTimeEntity {
                 ", gender=" + gender +
                 ", bodyWeight=" + bodyWeight +
                 ", bodyType=" + bodyType +
-                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

@@ -1,4 +1,4 @@
-package com.shshon.mypet.endpoint.v1.auth;
+package com.shshon.mypet.paths;
 
 public abstract class AuthPaths {
 

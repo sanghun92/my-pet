@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PetRegisterService {
+public class PetService {
 
     private final PetRepository petRepository;
     private final PetCategoryRepository petCategoryRepository;

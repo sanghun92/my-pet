@@ -4,7 +4,7 @@ import com.shshon.mypet.auth.domain.AuthenticationMember;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.endpoint.v1.pet.request.PetRegisterRequest;
 import com.shshon.mypet.mapper.image.ImageDtoMapper;
-import com.shshon.mypet.pet.service.PetRegisterService;
+import com.shshon.mypet.pet.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class PetServiceApi {
 
-    private final PetRegisterService petRegisterService;
+    private final PetService petService;
     private final ImageDtoMapper imageDtoMapper;
 
     @PostMapping(value = "/v1/pets",
@@ -33,7 +33,7 @@ public class PetServiceApi {
     public ResponseEntity<?> registerMyPet(@AuthenticationMember LoginMember member,
                                            @RequestPart(value = "request") @Valid PetRegisterRequest request,
                                            @RequestPart(value = "petImage", required = false) MultipartFile petImage) {
-        petRegisterService.registerMyPet(
+        petService.registerMyPet(
                 member.id(),
                 request.categoryId(),
                 request.toMyPetDto(),

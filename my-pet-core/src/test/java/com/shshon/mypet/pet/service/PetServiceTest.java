@@ -3,7 +3,6 @@ package com.shshon.mypet.pet.service;
 import com.shshon.mypet.pet.domain.*;
 import com.shshon.mypet.pet.dto.PetDto;
 import com.shshon.mypet.pet.event.PetRegisterEvent;
-import com.shshon.mypet.petcategory.domain.PetCategory;
 import com.shshon.mypet.petcategory.domain.PetCategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,14 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class PetRegisterServiceTest {
+class PetServiceTest {
 
     @Mock
     private PetRepository petRepository;
@@ -34,7 +32,7 @@ class PetRegisterServiceTest {
     private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
-    private PetRegisterService petRegisterService;
+    private PetService petService;
 
     @BeforeEach
     void setUp() {
@@ -61,7 +59,7 @@ class PetRegisterServiceTest {
         given(petCategoryRepository.existsById(categoryId)).willReturn(Boolean.TRUE);
 
         // when
-        petRegisterService.registerMyPet(memberId, categoryId, petDto, null);
+        petService.registerMyPet(memberId, categoryId, petDto, null);
 
         // then
         then(petCategoryRepository).should(times(1)).existsById(categoryId);

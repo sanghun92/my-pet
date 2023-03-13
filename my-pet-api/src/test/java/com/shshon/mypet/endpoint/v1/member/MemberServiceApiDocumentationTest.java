@@ -4,8 +4,7 @@ import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberChangePasswordRequest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
 import com.shshon.mypet.member.dto.MemberDto;
-import com.shshon.mypet.member.service.MemberRegisterService;
-import com.shshon.mypet.member.service.MemberUpdateService;
+import com.shshon.mypet.member.service.MemberService;
 import com.shshon.mypet.paths.MemberPaths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,10 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
-    private MemberRegisterService memberRegisterService;
-
-    @MockBean
-    private MemberUpdateService memberUpdateService;
+    private MemberService memberService;
 
     @Test
     @DisplayName("회원 가입 요청시 회원 생성 후 201 코드로 응답한다")
@@ -57,7 +53,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                 .phoneNumber("01012345678")
                 .birthDay(LocalDate.now())
                 .build();
-        given(memberRegisterService.createMember(any(MemberDto.class))).willReturn(memberDto);
+        given(memberService.createMember(any(MemberDto.class))).willReturn(memberDto);
 
         // when
         MemberRegisterRequest request = MemberRegisterRequest.builder()
@@ -101,7 +97,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
     void certificateMemberRequestThenReturnResponse() throws Exception {
         // given
         String code = UUID.randomUUID().toString();
-        willDoNothing().given(memberUpdateService).certificateMember(code);
+        willDoNothing().given(memberService).certificateMember(code);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(get(MemberPaths.CERTIFICATE_MEMBER)
@@ -129,7 +125,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                 .email("test@test.com")
                 .password("NewPassword1234!")
                 .build();
-        willDoNothing().given(memberUpdateService).changePassword(any(MemberDto.class));
+        willDoNothing().given(memberService).changePassword(any(MemberDto.class));
 
         // when
         ResultActions resultActions = this.mockMvc.perform(put(MemberPaths.CHANGE_PASSWORD)

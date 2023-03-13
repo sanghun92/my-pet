@@ -1,21 +1,26 @@
 package com.shshon.mypet.member.domain;
 
 import com.shshon.mypet.common.domain.BaseTimeEntity;
+import com.shshon.mypet.common.domain.DeleteHistory;
+import com.shshon.mypet.common.domain.Deleteable;
 import com.shshon.mypet.member.exception.AuthorizationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "members")
+@Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity
+        implements Deleteable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +42,8 @@ public class Member extends BaseTimeEntity {
 
     @Column(length = 13)
     private String phoneNumber;
+
+    private DeleteHistory deleteHistory = DeleteHistory.nonDeleted();
 
     @Builder
     public Member(String email,
@@ -73,6 +80,11 @@ public class Member extends BaseTimeEntity {
 
     public void changePassword(String password) {
         this.password = Password.of(password);
+    }
+
+    @Override
+    public void delete() {
+        this.deleteHistory.writeDeleteHistory();
     }
 
     @Override

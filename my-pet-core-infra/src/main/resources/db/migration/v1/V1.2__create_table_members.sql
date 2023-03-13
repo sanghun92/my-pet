@@ -1,12 +1,15 @@
 CREATE TABLE IF NOT EXISTS members (
-    id bigint NOT NULL AUTO_INCREMENT,
-    email varchar(50) NOT NULL,
-    password varchar(255) NOT NULL,
-    nickname varchar(30) NOT NULL,
-    certification_code binary(16) NOT NULL,
-    certificated_at datetime(6),
-    created_at datetime(6),
-    modified_at datetime(6),
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nickname VARCHAR(30) NOT NULL,
+    certification_code BINARY(16) NOT NULL,
+    certificated_at DATETIME(6),
+    birth_day DATE,
+    is_deleted BOOLEAN NOT NULL,
+    deleted_at DATETIME(6),
+    created_at DATETIME(6),
+    modified_at DATETIME(6),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 

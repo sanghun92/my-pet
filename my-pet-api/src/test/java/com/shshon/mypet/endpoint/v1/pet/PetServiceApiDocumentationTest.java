@@ -9,7 +9,7 @@ import com.shshon.mypet.paths.PetPaths;
 import com.shshon.mypet.pet.domain.PetBodyType;
 import com.shshon.mypet.pet.domain.PetGender;
 import com.shshon.mypet.pet.dto.PetDto;
-import com.shshon.mypet.pet.service.PetRegisterService;
+import com.shshon.mypet.pet.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PetServiceApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
-    private PetRegisterService petRegisterService;
+    private PetService petService;
 
     @MockBean
     private ImageDtoMapper imageDtoMapper;
@@ -74,7 +74,7 @@ class PetServiceApiDocumentationTest extends ApiDocumentationTest {
                 .build();
         MockMultipartFile petImage = new MockMultipartFile("petImage", "coffee_sample.jpg", MediaType.MULTIPART_FORM_DATA_VALUE, new byte[0]);
         MockMultipartFile request = new MockMultipartFile("request", "request", MediaType.APPLICATION_JSON_VALUE, toJsonBytes(petRegisterRequest));
-        willDoNothing().given(petRegisterService).registerMyPet(any(Long.class), any(Long.class), any(PetDto.class), any(ImageDto.class));
+        willDoNothing().given(petService).registerMyPet(any(Long.class), any(Long.class), any(PetDto.class), any(ImageDto.class));
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
