@@ -18,10 +18,24 @@ services:
   redis:
     image: redis:latest
     container_name: my-pet-redis
+    restart: always
     ports:
       - "6379:6379"
-    restart: always
     volumes:
       - ~/dev/docker/volume/myPetRedis/data:/data
       - ~/dev/docker/volume/myPetRedis/conf/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
+  proxy:
+    image: nginx:latest
+    container_name: my-pet-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ~/dev/docker/volume/myPetProxy/log/nginx:/var/log/nginx
+    environment:
+      - TZ=Asia/Seoul
