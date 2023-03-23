@@ -1,32 +1,69 @@
 package com.shshon.mypet.endpoint.v1.auth;
 
+import com.shshon.mypet.auth.application.AuthService;
+import com.shshon.mypet.auth.application.EmailVerificationService;
+import com.shshon.mypet.auth.domain.HttpRequestClient;
+import com.shshon.mypet.auth.domain.RequestClient;
 import com.shshon.mypet.auth.dto.TokenDto;
-import com.shshon.mypet.auth.service.AuthService;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
+import com.shshon.mypet.endpoint.v1.auth.request.TokenReIssueRequest;
 import com.shshon.mypet.endpoint.v1.auth.response.TokenResponse;
+import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
+import com.shshon.mypet.properties.JwtTokenProperties;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
 )
+@RequiredArgsConstructor
 public class AuthApi {
 
     private final AuthService authService;
-
-    public AuthApi(AuthService authService) {
-        this.authService = authService;
-    }
+    private final EmailVerificationService emailVerificationService;
+    private final JwtTokenProperties jwtTokenProperties;
 
     @PostMapping("/v1/auth/login")
-    public TokenResponse login(@RequestBody @Valid LoginMemberRequest request) {
-        TokenDto tokenDto = authService.login(request.email(), request.password());
-        return TokenResponse.of(tokenDto);
+    public ResponseEntity<ApiResponseV1<TokenResponse>> login(@RequestBody @Valid LoginMemberRequest request,
+                                                              @RequestClient HttpRequestClient client) {
+        TokenDto tokenDto = authService.login(request.email(), request.password(), client);
+        return getTokenResponseEntity(tokenDto);
+    }
+
+    @PostMapping("/v1/auth/verification")
+    public ApiResponseV1<?> sendEmailVerification(@RequestBody String email) {
+        emailVerificationService.sendEmailVerification(email);
+        return ApiResponseV1.ok();
+    }
+
+    @GetMapping(value = "/v1/auth/verification", consumes = MediaType.ALL_VALUE)
+    public void verifyEmail(@RequestParam("code") String code) {
+        emailVerificationService.verifyEmail(code);
+    }
+
+    @PostMapping("/v1/auth/token")
+    public ResponseEntity<ApiResponseV1<TokenResponse>> reIssueToken(@RequestBody @Valid TokenReIssueRequest request) {
+        TokenDto tokenDto = authService.reIssueToken(request.refreshToken());
+        return getTokenResponseEntity(tokenDto);
+    }
+
+    private ResponseEntity<ApiResponseV1<TokenResponse>> getTokenResponseEntity(TokenDto tokenDto) {
+        String refreshToken = tokenDto.refreshToken().token();
+        ResponseCookie responseCookie = ResponseCookie.from("REFRESH_TOKEN", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(jwtTokenProperties.refreshToken().validityInSeconds())
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(ApiResponseV1.ok(new TokenResponse(tokenDto.accessToken())));
     }
 }

@@ -101,7 +101,7 @@ public class Pet extends BaseTimeEntity
     @Override
     public String toString() {
         return "Pet{" +
-                "id=" + id +
+                "memberId=" + id +
                 ", memberId=" + memberId +
                 ", name='" + name + '\'' +
                 ", birthDay=" + birthDay +

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang='en' xmlns:th='http://www.thymeleaf.org'>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <title>[My Pet] 회원 가입 인증</title>
 </head>
 <body>
-<span>안녕하세요. </span>
-<span th:text="${name}"></span>
-<span>님</span>
-
+<h4>My Pet 회원 가입 인증</h4>
+<p>
+  안녕하세요.<br />
+  My Pet 가입 인증 주소가 발급되었습니다.<br />
+  아래 인증하기 선택시 이메일 인증됩니다.
+</p>
 <br />
-<br />
-<h4>서비스를 사용하려면 링크를 클릭하세요.</h4>
-<a th:href="${link}" target="_blank">이메일 인증하기</a>
-
+<a th:href='${link}' href='#' target='_blank'>인증하기</a>
 <br />
 <br />
 <p>
   링크가 동작 하지 않는 경우에는 아래 URL을 웹 브라우저에 복사해서 붙여 넣으세요.
   <br />
-  <span th:text="${link}"></span>
+  <span th:text='${link}'></span>
 </p>
 </body>
 </html>

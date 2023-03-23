@@ -1,7 +1,7 @@
 package com.shshon.mypet.advice.requestDecorator;
 
+import com.shshon.mypet.auth.application.AuthService;
 import com.shshon.mypet.auth.domain.AuthenticationMember;
-import com.shshon.mypet.auth.service.AuthService;
 import com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;

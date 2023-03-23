@@ -1,17 +1,8 @@
 package com.shshon.mypet.auth.dto;
 
-import lombok.Getter;
+import com.shshon.mypet.auth.domain.RefreshToken;
 
-@Getter
-public class TokenDto {
+public record TokenDto(String accessToken,
+                       RefreshToken refreshToken) {
 
-    private final String token;
-
-    public TokenDto(String token) {
-        this.token = token;
-    }
-
-    public static TokenDto of(String token) {
-        return new TokenDto(token);
-    }
 }

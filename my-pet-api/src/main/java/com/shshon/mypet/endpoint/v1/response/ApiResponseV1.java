@@ -18,6 +18,10 @@ public abstract class ApiResponseV1<T> {
         this.data = data;
     }
 
+    public static <T> ApiResponseV1<T> ok() {
+        return OkResponseV1.of(null);
+    }
+
     public static <T> ApiResponseV1<T> ok(T body) {
         return OkResponseV1.of(body);
     }

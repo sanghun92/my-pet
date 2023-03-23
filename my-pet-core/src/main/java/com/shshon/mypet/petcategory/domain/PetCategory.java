@@ -80,7 +80,7 @@ public class PetCategory extends BaseTimeEntity {
     @Override
     public String toString() {
         return "PetCategory{" +
-                "id=" + id +
+                "memberId=" + id +
                 ", type=" + type +
                 ", name='" + name + '\'' +
                 '}';

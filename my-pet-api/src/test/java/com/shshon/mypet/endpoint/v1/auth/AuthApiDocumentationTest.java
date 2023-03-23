@@ -1,7 +1,9 @@
 package com.shshon.mypet.endpoint.v1.auth;
 
+import com.shshon.mypet.auth.application.AuthService;
+import com.shshon.mypet.auth.application.EmailVerificationService;
+import com.shshon.mypet.auth.domain.RefreshToken;
 import com.shshon.mypet.auth.dto.TokenDto;
-import com.shshon.mypet.auth.service.AuthService;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
 import com.shshon.mypet.paths.AuthPaths;
@@ -13,13 +15,22 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentRequest;
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,12 +40,16 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private EmailVerificationService emailVerificationService;
+
     @Test
     @DisplayName("로그인 요청시 회원 인증 후 토큰 정보를 반환한다.")
     void loginMemberRequestThenReturnTokenResponse() throws Exception {
         // given
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
-        given(authService.login(any(), any())).willReturn(TokenDto.of(token));
+        String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
+        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1");
+        given(authService.login(any(), any(), any())).willReturn(new TokenDto(accessToken, refreshToken));
 
         // when
         LoginMemberRequest request = LoginMemberRequest.builder()
@@ -49,7 +64,7 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.token").isNotEmpty())
+                .andExpect(jsonPath("$.data.accessToken").isNotEmpty())
                 .andDo(document("auth/member-login",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -57,9 +72,63 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
                                 fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일 주소"),
                                 fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 패스워드")
                         ),
+                        responseCookies(
+                                cookieWithName("REFRESH_TOKEN").description("Refresh Token")
+                        ),
                         responseFields(
                                 beneathPath("data").withSubsectionId("data"),
-                                fieldWithPath("token").type(JsonFieldType.STRING).description("사용자 인증 토큰")
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("사용자 인증 토큰")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("이메일 인증 요청시 해당 이메일 주소로 메일링 후 200 코드로 응답한다")
+    void sendEmailVerificationRequestThenReturnResponse() throws Exception {
+        // given
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("email", "test@test.com");
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(
+                post(AuthPaths.SEND_EMAIL_VERIFICATION)
+                        .content(toJsonString(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(document("auth/sendEmailVerification",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("인증할 이메일 주소")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("이메일 인증 요청시 해당 이메일 인증 후 200 코드로 응답한다")
+    void verifyEmailRequestThenReturnResponse() throws Exception {
+        // given
+        String code = UUID.randomUUID().toString();
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(
+                get(AuthPaths.SEND_EMAIL_VERIFICATION)
+                        .queryParam("code", code)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(document("auth/verifyEmail",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        queryParameters(
+                                parameterWithName("code").description("이메일 인증 코드")
                         )
                 ));
     }

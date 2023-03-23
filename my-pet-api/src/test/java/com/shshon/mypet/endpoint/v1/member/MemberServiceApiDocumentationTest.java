@@ -3,8 +3,8 @@ package com.shshon.mypet.endpoint.v1.member;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberChangePasswordRequest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
+import com.shshon.mypet.member.application.MemberService;
 import com.shshon.mypet.member.dto.MemberDto;
-import com.shshon.mypet.member.service.MemberService;
 import com.shshon.mypet.paths.MemberPaths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentRequest;
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentResponse;
@@ -27,11 +26,10 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,11 +55,11 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
 
         // when
         MemberRegisterRequest request = MemberRegisterRequest.builder()
-                .email(memberDto.getEmail())
-                .password(memberDto.getPassword())
-                .nickname(memberDto.getNickname())
-                .phoneNumber(memberDto.getPhoneNumber())
-                .birthDay(memberDto.getBirthDay())
+                .email(memberDto.email())
+                .password(memberDto.password())
+                .nickname(memberDto.nickname())
+                .phoneNumber(memberDto.phoneNumber())
+                .birthDay(memberDto.birthDay())
                 .build();
         ResultActions resultActions = this.mockMvc.perform(
                 post(MemberPaths.JOIN_MEMBER)
@@ -88,31 +86,6 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.LOCATION).description("Location Header")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("회원 가입 요청시 회원 생성 후 201 코드로 응답한다")
-    void certificateMemberRequestThenReturnResponse() throws Exception {
-        // given
-        String code = UUID.randomUUID().toString();
-        willDoNothing().given(memberService).certificateMember(code);
-
-        // when
-        ResultActions resultActions = this.mockMvc.perform(get(MemberPaths.CERTIFICATE_MEMBER)
-                .queryParam("code", code)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andExpect(status().isOk())
-                .andDo(document("member/member-certification",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        queryParameters(
-                                parameterWithName("code").description("이메일 인증 코드")
                         )
                 ));
     }

@@ -14,33 +14,33 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Builder
-public record PetRegisterRequest (
+public record PetRegisterRequest(
 
-    @JsonProperty("categoryId")
-    @NotNull(message = "반려동물 타입은 필수값 입니다.")
-    Long categoryId,
+        @JsonProperty("categoryId")
+        @NotNull(message = "반려동물 타입은 필수값 입니다.")
+        Long categoryId,
 
-    @JsonProperty("name")
-    @NotEmpty(message = "반려동물 이름은 필수값 입니다.")
-    String name,
+        @JsonProperty("name")
+        @NotEmpty(message = "반려동물 이름은 필수값 입니다.")
+        String name,
 
-    @JsonProperty("birthDay")
-    @NotNull(message = "반려동물 생일은 필수값 입니다.")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDate birthDay,
+        @JsonProperty("birthDay")
+        @NotNull(message = "반려동물 생일은 필수값 입니다.")
+        @JsonDeserialize(using = LocalDateDeserializer.class)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        LocalDate birthDay,
 
-    @JsonProperty("gender")
-    @NotEmpty(message = "반려동물 성별은 필수값 입니다.")
-    String gender,
+        @JsonProperty("gender")
+        @NotEmpty(message = "반려동물 성별은 필수값 입니다.")
+        String gender,
 
-    @JsonProperty("bodyWeight")
-    @NotNull(message = "반려동물 몸무게는 필수값 입니다.")
-    Integer bodyWeight,
+        @JsonProperty("bodyWeight")
+        @NotNull(message = "반려동물 몸무게는 필수값 입니다.")
+        Integer bodyWeight,
 
-    @JsonProperty("bodyType")
-    @NotEmpty(message = "반려동물 체형 타입은 필수값 입니다.")
-    String bodyType
+        @JsonProperty("bodyType")
+        @NotEmpty(message = "반려동물 체형 타입은 필수값 입니다.")
+        String bodyType
 ) {
     public PetDto toMyPetDto() {
         return PetDto.builder()

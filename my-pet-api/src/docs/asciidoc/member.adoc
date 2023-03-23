@@ -3,12 +3,10 @@
 
 [[Member-생성]]
 === Member 생성
-operation::member/member-create[snippets='curl-request,request-fields,http-request,response-headers,http-response']
 
-[[Member-인증]]
-=== Member 인증
-operation::member/member-certification[snippets='curl-request,query-parameters,http-request,http-response']
+operation::member/member-create[snippets='curl-request,request-fields,http-request,response-headers,http-response']
 
 [[Member-패스워드-변경]]
 === Member 패스워드 변경
+
 operation::member/member-change-password[snippets='curl-request,request-fields,http-request,http-response']

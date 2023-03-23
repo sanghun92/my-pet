@@ -1,31 +1,38 @@
 package com.shshon.mypet.auth.infra;
 
-import com.shshon.mypet.properties.TokenProperties;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.shshon.mypet.properties.JwtTokenProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@ExtendWith(SpringExtension.class)
+@EnableConfigurationProperties(JwtTokenProperties.class)
+@ContextConfiguration(
+        initializers = ConfigDataApplicationContextInitializer.class,
+        classes = {JwtTokenProviderImpl.class}
+)
+@TestPropertySource(properties = {
+        "security.jwt.accessToken.secret-key=askdfjlkasdfjlksadfjklsadjfalksdfjlaksdjflaksdjfksld",
+        "security.jwt.accessToken.validityInSeconds=2",
+        "security.jwt.refreshToken.validityInSeconds=2"
+})
 class JwtTokenProviderImplTest {
 
+
+    @Autowired
+    private JwtTokenProperties tokenProperties;
+
+    @Autowired
     private JwtTokenProviderImpl jwtTokenProviderImpl;
-    private static TokenProperties tokenProperties;
-
-    @BeforeAll
-    static void setUpAll() {
-        tokenProperties = new TokenProperties(
-                "askdfjlkasdfjlksadfjklsadjfalksdfjlaksdjflaksdjfksld",
-                2000L
-        );
-    }
-
-    @BeforeEach
-    void setUp() {
-        this.jwtTokenProviderImpl = new JwtTokenProviderImpl(tokenProperties);
-    }
 
     @Test
     @DisplayName("주어진 이메일로 인증 토큰을 생성한다.")
@@ -42,7 +49,7 @@ class JwtTokenProviderImplTest {
         String token = jwtTokenProviderImpl.createToken(email);
         boolean isValidBeforeSleep = jwtTokenProviderImpl.validateToken(token);
 
-        Thread.sleep(tokenProperties.validityInMilliseconds());
+        Thread.sleep(tokenProperties.accessToken().validityInSeconds() * 1000);
 
         assertAll(
                 () -> assertThat(isValidBeforeSleep).isTrue(),

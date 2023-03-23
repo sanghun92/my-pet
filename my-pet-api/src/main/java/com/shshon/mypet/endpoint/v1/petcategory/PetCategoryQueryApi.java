@@ -2,8 +2,8 @@ package com.shshon.mypet.endpoint.v1.petcategory;
 
 import com.shshon.mypet.endpoint.v1.petcategory.response.PetCategoryResponse;
 import com.shshon.mypet.pet.domain.PetType;
+import com.shshon.mypet.petcategory.application.PetCategoryQueryService;
 import com.shshon.mypet.petcategory.dto.PetCategoryDto;
-import com.shshon.mypet.petcategory.service.PetCategoryQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
