@@ -15,3 +15,13 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_general_ci
+  redis:
+    image: redis:latest
+    container_name: my-pet-redis
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - ~/dev/docker/volume/myPetRedis/data:/data
+      - ~/dev/docker/volume/myPetRedis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf

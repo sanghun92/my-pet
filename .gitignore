@@ -40,3 +40,4 @@ BOOT-INF/
 
 ### Spring REST DOCS
 /my-pet-api/src/main/resources/static/docs/
+/my-pet-core/src/main/generated

@@ -3,18 +3,6 @@ spring:
     active:
       - local
     group:
-      local:
-        - db
-        - infra
-        - security
-        - aws
-      test:
-        - db
-        - infra
-        - security
-        - aws
-      dev:
-        - db
-        - infra
-        - security
-        - aws
+      local: "db,infra,security,aws,web,redis"
+      test: "db,infra,security,aws,web,redis"
+      dev: "db,infra,security,aws,web,redis"
