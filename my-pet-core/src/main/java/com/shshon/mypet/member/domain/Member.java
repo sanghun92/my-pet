@@ -35,9 +35,6 @@ public class Member extends BaseTimeEntity
     @Column(length = 30, nullable = false)
     private String nickname;
 
-    @Embedded
-    private MemberCertification certification;
-
     private LocalDate birthDay;
 
     @Column(length = 13)
@@ -47,35 +44,21 @@ public class Member extends BaseTimeEntity
 
     @Builder
     public Member(String email,
-                   String password,
-                   String nickname,
-                   MemberCertification certification,
-                   LocalDate birthDay,
-                   String phoneNumber) {
+                  String password,
+                  String nickname,
+                  LocalDate birthDay,
+                  String phoneNumber) {
         this.email = email;
         this.password = Password.of(password);
         this.nickname = nickname;
-        this.certification = certification;
         this.birthDay = birthDay;
         this.phoneNumber = phoneNumber;
     }
 
     public void authenticate(String password) {
-        if(!this.password.matches(password)) {
+        if (!this.password.matches(password)) {
             throw new AuthorizationException();
         }
-    }
-
-    public String getCertification() {
-        return this.certification.getCode();
-    }
-
-    public boolean isCertificated() {
-        return this.certification.isCertificated();
-    }
-
-    public void onCertificate() {
-        this.certification = this.certification.onCertificate();
     }
 
     public void changePassword(String password) {

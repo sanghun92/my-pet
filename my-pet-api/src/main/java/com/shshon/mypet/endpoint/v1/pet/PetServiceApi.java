@@ -4,7 +4,7 @@ import com.shshon.mypet.auth.domain.AuthenticationMember;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.endpoint.v1.pet.request.PetRegisterRequest;
 import com.shshon.mypet.mapper.image.ImageDtoMapper;
-import com.shshon.mypet.pet.service.PetService;
+import com.shshon.mypet.pet.application.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -29,7 +29,7 @@ public class PetServiceApi {
     private final ImageDtoMapper imageDtoMapper;
 
     @PostMapping(value = "/v1/pets",
-            consumes = { MediaType.MULTIPART_MIXED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+            consumes = {MediaType.MULTIPART_MIXED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> registerMyPet(@AuthenticationMember LoginMember member,
                                            @RequestPart(value = "request") @Valid PetRegisterRequest request,
                                            @RequestPart(value = "petImage", required = false) MultipartFile petImage) {

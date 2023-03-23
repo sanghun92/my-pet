@@ -1,28 +1,30 @@
 package com.shshon.mypet.member.dto;
 
 import com.shshon.mypet.member.domain.Member;
-import com.shshon.mypet.member.domain.MemberCertification;
 import lombok.Builder;
-import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
 @Builder
-public class MemberDto {
-
-    private final Long id;
-    private final String email;
-    private final String password;
-    private final String nickname;
-    private final LocalDate birthDay;
-    private final String phoneNumber;
+public record MemberDto(Long id,
+                        String email,
+                        String password,
+                        String nickname,
+                        LocalDate birthDay,
+                        String phoneNumber,
+                        LocalDateTime createdAt
+) implements Serializable {
 
     public static MemberDto from(Member member) {
         return MemberDto.builder()
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
+                .birthDay(member.getBirthDay())
+                .phoneNumber(member.getPhoneNumber())
+                .createdAt(member.getCreatedAt())
                 .build();
     }
 
@@ -31,7 +33,6 @@ public class MemberDto {
                 .email(this.email)
                 .password(this.password)
                 .nickname(this.nickname)
-                .certification(MemberCertification.randomCode())
                 .birthDay(this.birthDay)
                 .phoneNumber(this.phoneNumber)
                 .build();
@@ -40,9 +41,12 @@ public class MemberDto {
     @Override
     public String toString() {
         return "MemberDto{" +
-                "id=" + id +
+                "memberId=" + id +
                 ", email='" + email + '\'' +
                 ", nickname='" + nickname + '\'' +
+                ", birthDay=" + birthDay +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

@@ -6,7 +6,7 @@ import com.shshon.mypet.advice.errorHandler.V1BindExceptionHandler;
 import com.shshon.mypet.auth.infra.JwtTokenProvider;
 import com.shshon.mypet.auth.infra.JwtTokenProviderImpl;
 import com.shshon.mypet.config.AuthenticationMemberTestConfig;
-import com.shshon.mypet.properties.TokenProperties;
+import com.shshon.mypet.properties.JwtTokenProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
-@EnableConfigurationProperties(TokenProperties.class)
+@EnableConfigurationProperties(JwtTokenProperties.class)
 @Import({
         V1BindExceptionHandler.class,
         AuthenticationMemberTestConfig.class,

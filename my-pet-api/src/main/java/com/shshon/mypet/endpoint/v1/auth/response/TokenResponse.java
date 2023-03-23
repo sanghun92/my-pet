@@ -7,19 +7,8 @@ import lombok.Builder;
 
 @ResponseV1
 public record TokenResponse(
-        @JsonProperty("token")
+        @JsonProperty("accessToken")
         String token
 ) {
-
-    @Builder
-    public TokenResponse(String token) {
-        this.token = token;
-    }
-
-    public static TokenResponse of(TokenDto tokenDto) {
-        return TokenResponse.builder()
-                .token(tokenDto.getToken())
-                .build();
-    }
 
 }

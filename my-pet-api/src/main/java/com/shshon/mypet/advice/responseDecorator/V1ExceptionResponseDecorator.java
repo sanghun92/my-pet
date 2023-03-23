@@ -3,6 +3,7 @@ package com.shshon.mypet.advice.responseDecorator;
 import com.shshon.mypet.advice.errorHandler.ApiV1ExceptionHandler;
 import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
 import com.shshon.mypet.endpoint.v1.response.ErrorResponseV1;
+import com.shshon.mypet.member.exception.AuthorizationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
@@ -42,11 +43,20 @@ public class V1ExceptionResponseDecorator implements ErrorController {
         return new ResponseEntity<>(ApiResponseV1.serverError("unhandled exception"), status);
     }
 
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ErrorResponseV1> handleAuthorizationException(HttpServletRequest request,
+                                                                        AuthorizationException ex) {
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
+        ErrorResponseV1 response = ApiResponseV1.unauthorized(ex.getMessage());
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponseV1> handleAuthenticationException(HttpServletRequest request,
                                                                          AuthenticationException ex) {
-        ApiV1ExceptionHandler.requestLog(log, request, ex);
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
         ErrorResponseV1 response = ApiResponseV1.unauthorized(ex.getMessage());
         return new ResponseEntity<>(response, httpStatus);
     }
@@ -54,8 +64,8 @@ public class V1ExceptionResponseDecorator implements ErrorController {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<ErrorResponseV1> handleHttpMediaTypeNotSupportedException(HttpServletRequest request,
                                                                                     HttpMediaTypeNotSupportedException ex) {
-        ApiV1ExceptionHandler.requestLog(log, request, ex);
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
         ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
         return new ResponseEntity<>(response, httpStatus);
     }
@@ -63,8 +73,8 @@ public class V1ExceptionResponseDecorator implements ErrorController {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponseV1> handleHttpRequestMethodNotSupportedException(HttpServletRequest request,
                                                                                         HttpRequestMethodNotSupportedException ex) {
-        ApiV1ExceptionHandler.requestLog(log, request, ex);
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
         ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
         return new ResponseEntity<>(response, httpStatus);
     }

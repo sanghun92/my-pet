@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberTest {
 
@@ -25,26 +23,9 @@ class MemberTest {
                 .email(email)
                 .password(password)
                 .nickname("myNickName")
-                .certification(MemberCertification.randomCode())
                 .birthDay(LocalDate.now())
                 .phoneNumber("01011112222")
                 .build();
-    }
-
-    @Test
-    @DisplayName("회원 인증에 성공한다")
-    void onCertificateMemberTest() {
-        // given
-        boolean beforeOnCertificatedMember = member.isCertificated();
-
-        // when
-        member.onCertificate();
-
-        // then
-        assertAll(
-                () -> assertThat(beforeOnCertificatedMember).isFalse(),
-                () -> assertThat(member.isCertificated()).isTrue()
-        );
     }
 
     @Test

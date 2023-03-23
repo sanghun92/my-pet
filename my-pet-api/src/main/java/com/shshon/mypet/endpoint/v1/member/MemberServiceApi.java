@@ -4,8 +4,8 @@ import com.shshon.mypet.auth.domain.AuthenticationMember;
 import com.shshon.mypet.auth.domain.LoginMember;
 import com.shshon.mypet.endpoint.v1.member.request.MemberChangePasswordRequest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
+import com.shshon.mypet.member.application.MemberService;
 import com.shshon.mypet.member.dto.MemberDto;
-import com.shshon.mypet.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -27,7 +27,7 @@ public class MemberServiceApi {
     @PostMapping("/v1/members")
     public ResponseEntity<?> joinMember(@RequestBody @Valid MemberRegisterRequest request) {
         MemberDto member = memberService.createMember(request.toMember());
-        return ResponseEntity.created(URI.create("v1/member/" + member.getId())).build();
+        return ResponseEntity.created(URI.create("v1/member/" + member.id())).build();
     }
 
     @PutMapping("/v1/members")
@@ -38,10 +38,5 @@ public class MemberServiceApi {
     @DeleteMapping("/v1/members")
     public void deleteMember(@AuthenticationMember LoginMember member) {
         memberService.deleteMember(member);
-    }
-
-    @GetMapping(value = "/v1/members/certification", consumes = MediaType.ALL_VALUE)
-    public void certificateMember(@RequestParam("code") String code) {
-        memberService.certificateMember(code);
     }
 }

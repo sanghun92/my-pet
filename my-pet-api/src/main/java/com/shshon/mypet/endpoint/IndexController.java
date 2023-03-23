@@ -18,7 +18,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String returnRestDocs() {
-        return "redirect:/docs/index.html";
+        return "redirect:/api/docs/index.html";
     }
 
     @GetMapping("/check")

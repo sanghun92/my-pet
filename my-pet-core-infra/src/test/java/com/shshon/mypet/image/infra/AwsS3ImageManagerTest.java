@@ -8,19 +8,29 @@ import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = "test")
-@EnableConfigurationProperties(value = AwsProperties.class)
-@SpringBootTest(classes = {AwsTestConfig.class},
-        properties = "spring.main.allow-bean-definition-overriding=true")
+@EnableConfigurationProperties(AwsProperties.class)
+@ContextConfiguration(
+        initializers = ConfigDataApplicationContextInitializer.class,
+        classes = {AwsTestConfig.class, AwsS3ImageManager.class}
+)
+@TestPropertySource(properties = {
+        "spring.main.allow-bean-definition-overriding=true",
+})
 class AwsS3ImageManagerTest {
 
     @Autowired

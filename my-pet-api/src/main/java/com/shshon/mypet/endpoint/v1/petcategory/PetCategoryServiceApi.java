@@ -1,7 +1,7 @@
 package com.shshon.mypet.endpoint.v1.petcategory;
 
 import com.shshon.mypet.endpoint.v1.petcategory.request.ParentPetCategoryRegisterRequest;
-import com.shshon.mypet.petcategory.service.PetCategoryRegisterService;
+import com.shshon.mypet.petcategory.application.PetCategoryRegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

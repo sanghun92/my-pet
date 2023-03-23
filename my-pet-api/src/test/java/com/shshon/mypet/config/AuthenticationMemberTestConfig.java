@@ -1,8 +1,8 @@
 package com.shshon.mypet.config;
 
 import com.shshon.mypet.advice.requestDecorator.AuthenticationMemberArgumentResolver;
+import com.shshon.mypet.auth.application.AuthService;
 import com.shshon.mypet.auth.domain.LoginMember;
-import com.shshon.mypet.auth.service.AuthService;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -26,7 +26,7 @@ public class AuthenticationMemberTestConfig implements WebMvcConfigurer {
     private static class AuthServiceStub extends AuthService {
 
         public AuthServiceStub() {
-            super(null, null);
+            super(null, null, null, null);
         }
 
         @Override
