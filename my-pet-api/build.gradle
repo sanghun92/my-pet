@@ -33,6 +33,9 @@ dependencies {
 
     // to fix [javax.annotation.meta.When not found]
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // to fix [ Could not write JSON: Java 8 date/time type `java.time.LocalDateTime` not supported]
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 test {
@@ -46,7 +49,7 @@ asciidoctor {
     dependsOn test
 
     sources {
-        include("**/index.adoc","**/common/*.adoc")
+        include("**/index.adoc", "**/common/*.adoc")
     }
     baseDirFollowsSourceFile()
 }
