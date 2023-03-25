@@ -1,7 +1,7 @@
 package com.shshon.mypet.advice.requestDecorator;
 
-import com.shshon.mypet.auth.application.AuthService;
 import com.shshon.mypet.auth.domain.AuthenticationMember;
+import com.shshon.mypet.auth.service.AuthQueryService;
 import com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -12,10 +12,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class AuthenticationMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthService authService;
+    private final AuthQueryService authQueryService;
 
-    public AuthenticationMemberArgumentResolver(AuthService authService) {
-        this.authService = authService;
+    public AuthenticationMemberArgumentResolver(AuthQueryService authQueryService) {
+        this.authQueryService = authQueryService;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class AuthenticationMemberArgumentResolver implements HandlerMethodArgume
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String credentials = AuthorizationExtractor.extract(webRequest.getNativeRequest(HttpServletRequest.class));
-        return authService.findMemberByToken(credentials);
+        return authQueryService.findMemberByToken(credentials);
     }
 }

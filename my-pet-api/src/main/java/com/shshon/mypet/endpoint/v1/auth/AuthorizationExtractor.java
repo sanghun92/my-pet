@@ -2,8 +2,6 @@ package com.shshon.mypet.endpoint.v1.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Enumeration;
 
 public class AuthorizationExtractor {
@@ -21,9 +19,6 @@ public class AuthorizationExtractor {
                 return extractAuthHeader(value);
             }
         }
-
-        Arrays.sort(new int[] {1,2,3});
-
         return null;
     }
 

@@ -1,8 +1,7 @@
 package com.shshon.mypet.config;
 
 import com.shshon.mypet.advice.requestDecorator.AuthenticationMemberArgumentResolver;
-import com.shshon.mypet.auth.application.AuthService;
-import com.shshon.mypet.auth.domain.LoginMember;
+import com.shshon.mypet.stub.auth.AuthQueryServiceStub;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -20,20 +19,6 @@ public class AuthenticationMemberTestConfig implements WebMvcConfigurer {
 
     @Bean
     public AuthenticationMemberArgumentResolver createAuthenticationPrincipalArgumentResolver() {
-        return new AuthenticationMemberArgumentResolver(new AuthServiceStub());
-    }
-
-    private static class AuthServiceStub extends AuthService {
-
-        public AuthServiceStub() {
-            super(null, null, null, null);
-        }
-
-        @Override
-        public LoginMember findMemberByToken(String token) {
-            return LoginMember.builder()
-                    .id(1L)
-                    .build();
-        }
+        return new AuthenticationMemberArgumentResolver(new AuthQueryServiceStub());
     }
 }
