@@ -1,5 +1,6 @@
 rootProject.name = 'my-pet'
-include("my-pet-api")
+include("my-pet-app")
 include("my-pet-config")
-include("my-pet-core")
-include("my-pet-core-infra")
+include("my-pet-api")
+include("my-pet-domain")
+include("my-pet-infra")

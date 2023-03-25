@@ -6,7 +6,7 @@ dependencies {
 
     // modules
     implementation project(':my-pet-config')
-    implementation project(':my-pet-core')
+    implementation project(':my-pet-domain')
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

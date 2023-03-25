@@ -21,10 +21,7 @@ dependencies {
 
     // modules
     implementation project(':my-pet-config')
-    implementation project(':my-pet-core')
-    implementation project(':my-pet-core-infra')
-
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation project(':my-pet-domain')
 
     testImplementation 'io.rest-assured:rest-assured:5.3.0'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
@@ -68,15 +65,10 @@ build {
     dependsOn copyDocument
 }
 
-bootJar {
+jar {
     enabled = true
-    dependsOn asciidoctor
     from("${asciidoctor.outputDir}") {
-        duplicatesStrategy = 'include'
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         into 'BOOT-INF/classes/static/docs'
     }
-}
-
-jar {
-    enabled = false
 }
