@@ -1,0 +1,24 @@
+plugins {
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+dependencies {
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // modules
+    implementation project(':my-pet-config')
+    implementation project(':my-pet-api')
+    implementation project(':my-pet-domain')
+    implementation project(':my-pet-infra')
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+bootJar {
+    enabled = true
+    archiveFileName = 'my-pet.jar'
+    archiveVersion = '1.0.0'
+}
+
+jar { enabled = false }
