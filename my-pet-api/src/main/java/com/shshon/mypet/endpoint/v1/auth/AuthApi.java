@@ -1,7 +1,6 @@
 package com.shshon.mypet.endpoint.v1.auth;
 
-import com.shshon.mypet.auth.application.AuthService;
-import com.shshon.mypet.auth.application.EmailVerificationService;
+import com.shshon.mypet.auth.application.AuthFacade;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RequestClient;
 import com.shshon.mypet.auth.dto.TokenDto;
@@ -26,31 +25,30 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthApi {
 
-    private final AuthService authService;
-    private final EmailVerificationService emailVerificationService;
+    private final AuthFacade authFacade;
     private final JwtTokenProperties jwtTokenProperties;
 
     @PostMapping("/v1/auth/login")
     public ResponseEntity<ApiResponseV1<TokenResponse>> login(@RequestBody @Valid LoginMemberRequest request,
                                                               @RequestClient HttpRequestClient client) {
-        TokenDto tokenDto = authService.login(request.email(), request.password(), client);
+        TokenDto tokenDto = authFacade.login(request.email(), request.password(), client);
         return getTokenResponseEntity(tokenDto);
     }
 
     @PostMapping("/v1/auth/verification")
     public ApiResponseV1<?> sendEmailVerification(@RequestBody String email) {
-        emailVerificationService.sendEmailVerification(email);
+        authFacade.sendEmailVerification(email);
         return ApiResponseV1.ok();
     }
 
     @GetMapping(value = "/v1/auth/verification", consumes = MediaType.ALL_VALUE)
     public void verifyEmail(@RequestParam("code") String code) {
-        emailVerificationService.verifyEmail(code);
+        authFacade.verifyEmail(code);
     }
 
     @PostMapping("/v1/auth/token")
     public ResponseEntity<ApiResponseV1<TokenResponse>> reIssueToken(@RequestBody @Valid TokenReIssueRequest request) {
-        TokenDto tokenDto = authService.reIssueToken(request.refreshToken());
+        TokenDto tokenDto = authFacade.reIssueToken(request.refreshToken());
         return getTokenResponseEntity(tokenDto);
     }
 

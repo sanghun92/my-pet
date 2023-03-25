@@ -41,10 +41,9 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            parseClaims(token)
+            return parseClaims(token)
                     .getExpiration()
                     .before(new Date());
-            return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }

@@ -1,7 +1,6 @@
 package com.shshon.mypet.endpoint.v1.auth;
 
-import com.shshon.mypet.auth.application.AuthService;
-import com.shshon.mypet.auth.application.EmailVerificationService;
+import com.shshon.mypet.auth.application.AuthFacade;
 import com.shshon.mypet.auth.domain.RefreshToken;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.docs.ApiDocumentationTest;
@@ -38,10 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private EmailVerificationService emailVerificationService;
+    private AuthFacade authFacade;
 
     @Test
     @DisplayName("로그인 요청시 회원 인증 후 토큰 정보를 반환한다.")
@@ -49,7 +45,7 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
         // given
         String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
         RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1");
-        given(authService.login(any(), any(), any())).willReturn(new TokenDto(accessToken, refreshToken));
+        given(authFacade.login(any(), any(), any())).willReturn(new TokenDto(accessToken, refreshToken));
 
         // when
         LoginMemberRequest request = LoginMemberRequest.builder()
