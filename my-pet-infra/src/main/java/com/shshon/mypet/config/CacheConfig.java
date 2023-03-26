@@ -62,7 +62,7 @@ public class CacheConfig {
                         .fromSerializer(RedisSerializer.json()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = InitialCacheConfigurationBuilder.builder()
-                .add(CacheNames.MEMBER_PROFILE, CacheNames.MEMBER_PROFILE_EXP_SEC)
+                .add(CacheNames.MEMBER, CacheNames.MEMBER_EXP_SEC)
                 .build();
 
         return RedisCacheManager

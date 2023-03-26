@@ -1,6 +1,7 @@
 package com.shshon.mypet.advice.errorHandler;
 
 import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
+import com.shshon.mypet.endpoint.v1.response.ErrorBody;
 import com.shshon.mypet.endpoint.v1.response.ErrorResponseV1;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 @Component
 public class V1BindExceptionHandler implements ApiV1ExceptionHandler {
 
+    public static final String BIND_ERROR_MESSAGE = "잘못 된 요청입니다.";
+
     @Override
     public boolean support(Exception exception) {
         return exception instanceof BindException;
@@ -25,12 +28,12 @@ public class V1BindExceptionHandler implements ApiV1ExceptionHandler {
     public ResponseEntity<ErrorResponseV1> onException(HttpServletRequest request, Exception exception) {
         ApiV1ExceptionHandler.requestLog(log, request, HttpStatus.BAD_REQUEST, exception);
         BindException bindEx = (BindException) exception;
-        List<String> messages = bindEx.getBindingResult()
+        List<ErrorBody.ErrorField> errorFields = bindEx.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> "[" + fieldError.getField() + "] " + fieldError.getDefaultMessage())
+                .map(fieldError -> new ErrorBody.ErrorField(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(ApiResponseV1.clientError(messages), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponseV1.clientError(BIND_ERROR_MESSAGE, errorFields), HttpStatus.BAD_REQUEST);
     }
 }

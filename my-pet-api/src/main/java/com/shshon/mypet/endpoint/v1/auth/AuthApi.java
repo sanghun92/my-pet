@@ -47,8 +47,9 @@ public class AuthApi {
     }
 
     @PostMapping("/v1/auth/token")
-    public ResponseEntity<ApiResponseV1<TokenResponse>> reIssueToken(@RequestBody @Valid TokenReIssueRequest request) {
-        TokenDto tokenDto = authFacade.reIssueToken(request.refreshToken());
+    public ResponseEntity<ApiResponseV1<TokenResponse>> reIssueToken(@RequestBody @Valid TokenReIssueRequest request,
+                                                                     @RequestClient HttpRequestClient client) {
+        TokenDto tokenDto = authFacade.reIssueToken(request.refreshToken(), client);
         return getTokenResponseEntity(tokenDto);
     }
 

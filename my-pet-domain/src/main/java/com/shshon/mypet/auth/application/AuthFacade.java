@@ -5,64 +5,54 @@ import com.shshon.mypet.auth.domain.EmailVerification;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RefreshToken;
 import com.shshon.mypet.auth.dto.TokenDto;
-import com.shshon.mypet.auth.service.EmailVerificationQueryService;
+import com.shshon.mypet.auth.service.EmailVerificationService;
 import com.shshon.mypet.auth.service.TokenService;
 import com.shshon.mypet.email.application.EmailService;
-import com.shshon.mypet.email.dto.MailMessageDto;
 import com.shshon.mypet.member.domain.Member;
-import com.shshon.mypet.member.service.MemberQueryService;
+import com.shshon.mypet.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Facade
 @RequiredArgsConstructor
+@Slf4j
 public class AuthFacade {
 
-    private final MemberQueryService memberQueryService;
+    private final MemberService memberService;
     private final TokenService tokenService;
-    private final EmailVerificationQueryService emailVerificationQueryService;
+    private final EmailVerificationService emailVerificationService;
     private final EmailService emailService;
 
     @Transactional
     public TokenDto login(String email, String password, HttpRequestClient client) {
-        Member member = memberQueryService.findByEmail(email);
+        log.info("로그인 요청 - email : {}", email);
+        Member member = memberService.findByEmail(email);
         member.authenticate(password);
 
-        String accessToken = tokenService.createAccessTokenBy(email);
-        RefreshToken refreshToken = tokenService.createRefreshToken(member, client);
-        return new TokenDto(accessToken, refreshToken);
+        return tokenService.createTokens(member, client);
     }
 
-    public TokenDto reIssueToken(String refreshToken) {
+    public TokenDto reIssueToken(String refreshToken, HttpRequestClient client) {
+        log.info("토큰 재발급 요청 - Refresh Token : {}", refreshToken);
         RefreshToken foundRefreshToken = tokenService.findRefreshTokenBy(refreshToken);
-        String newAccessToken = tokenService.createAccessTokenBy(foundRefreshToken.memberEmail());
+        Member member = memberService.findById(foundRefreshToken.memberId());
+
+        String newAccessToken = tokenService.createAccessTokenBy(member, client);
         return new TokenDto(newAccessToken, foundRefreshToken);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void sendEmailVerification(String email) {
-        EmailVerification emailVerification = emailVerificationQueryService.findByEmail(email);
-        String certificationLink = String.format("http://localhost/join/email-verification?code=%s", emailVerification.getCode());
-
-        Map<String, String> attribute = new HashMap<>();
-        attribute.put("name", email);
-        attribute.put("link", certificationLink);
-
-        MailMessageDto mailMessageDto = MailMessageDto.builder()
-                .to(new String[]{email})
-                .subject("[My Pet] 가입 인증 메일입니다.")
-                .template("memberCertificationMail")
-                .attribute(attribute)
-                .build();
-        emailService.send(mailMessageDto);
+        log.info("이메일 인증 발송 요청 - email : {}", email);
+        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
+        emailService.send(emailVerification.generateVerificationMailMessage());
     }
 
     @Transactional
     public void verifyEmail(String code) {
-        EmailVerification emailVerification = emailVerificationQueryService.findByCode(code);
+        log.info("이메일 인증 요청 - code : {}", code);
+        EmailVerification emailVerification = emailVerificationService.findByCode(code);
         emailVerification.verify();
     }
 }

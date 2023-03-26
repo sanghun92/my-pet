@@ -11,6 +11,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class RequestClientArgumentResolver implements HandlerMethodArgumentResolver {
 
+    public static final String IS_MOBILE = "MOBILE";
+    public static final String IS_PHONE = "PHONE";
+    public static final String IS_TABLET = "TABLET";
+    public static final String IS_PC = "PC";
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(RequestClient.class);
@@ -22,7 +27,7 @@ public class RequestClientArgumentResolver implements HandlerMethodArgumentResol
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
-        return new HttpRequestClient(getClientIpAddress(httpServletRequest));
+        return new HttpRequestClient(getClientIpAddress(httpServletRequest), getUserAgent(httpServletRequest));
     }
 
     private String getClientIpAddress(HttpServletRequest request) {
@@ -43,5 +48,18 @@ public class RequestClientArgumentResolver implements HandlerMethodArgumentResol
             ipAddress = request.getRemoteAddr();
         }
         return ipAddress;
+    }
+
+    private String getUserAgent(HttpServletRequest httpServletRequest) {
+        String userAgent = httpServletRequest.getHeader("User-Agent").toUpperCase();
+        if (userAgent.contains(IS_MOBILE)) {
+            if (!userAgent.contains(IS_PHONE)) {
+                return IS_MOBILE;
+            } else {
+                return IS_TABLET;
+            }
+        }
+
+        return IS_PC;
     }
 }

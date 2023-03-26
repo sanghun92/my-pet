@@ -1,10 +1,12 @@
 package com.shshon.mypet.endpoint.v1.auth;
 
 import com.shshon.mypet.auth.application.AuthFacade;
+import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RefreshToken;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
+import com.shshon.mypet.endpoint.v1.auth.request.TokenReIssueRequest;
 import com.shshon.mypet.paths.AuthPaths;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import java.util.UUID;
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentRequest;
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
@@ -44,7 +47,7 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
     void loginMemberRequestThenReturnTokenResponse() throws Exception {
         // given
         String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
-        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1");
+        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1", "PC");
         given(authFacade.login(any(), any(), any())).willReturn(new TokenDto(accessToken, refreshToken));
 
         // when
@@ -112,7 +115,7 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
-                get(AuthPaths.SEND_EMAIL_VERIFICATION)
+                get(AuthPaths.VERIFY_EMAIL)
                         .queryParam("code", code)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -125,6 +128,38 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
                         getDocumentResponse(),
                         queryParameters(
                                 parameterWithName("code").description("이메일 인증 코드")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("토큰 재발급 요청시 Refresh Token 유효성 검사 후 200 코드로 응답한다")
+    void reIssueTokenRequestThenReturnResponse() throws Exception {
+        // given
+        TokenReIssueRequest request = new TokenReIssueRequest(UUID.randomUUID().toString());
+        String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
+        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1", "PC");
+        given(authFacade.reIssueToken(eq(request.refreshToken()), any(HttpRequestClient.class))).willReturn(new TokenDto(accessToken, refreshToken));
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(
+                post(AuthPaths.RE_ISSUE_TOKEN)
+                        .content(toJsonBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(document("auth/reIssueToken",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("재발급용 토큰")
+                        ),
+                        responseFields(
+                                beneathPath("data").withSubsectionId("data"),
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("사용자 인증 토큰")
                         )
                 ));
     }

@@ -9,4 +9,14 @@ operation::member/member-create[snippets='curl-request,request-fields,http-reque
 [[Member-패스워드-변경]]
 === Member 패스워드 변경
 
-operation::member/member-change-password[snippets='curl-request,request-fields,http-request,http-response']
+operation::member/member-change-password[snippets='curl-request,request-headers,request-fields,http-request,http-response']
+
+[[Member-프로필-조회]]
+=== Member 프로필 조회 요청
+
+operation::member/findProfile[snippets='curl-request,request-headers,http-request,response-fields-data,http-response']
+
+[[Member-프로필-수정]]
+=== Member 프로필 수정 요청
+
+operation::member/editMember[snippets='curl-request,request-headers,request-fields,http-request,response-fields-data,http-response']

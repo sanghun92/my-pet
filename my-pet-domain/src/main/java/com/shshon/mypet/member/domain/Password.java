@@ -21,7 +21,14 @@ public class Password {
     }
 
     public static Password of(String password) {
+        validatePassword(password);
         return new Password(SHA256EncryptUtils.encrypt(password));
+    }
+
+    private static void validatePassword(String password) {
+        if (password == null) {
+            throw new IllegalArgumentException("패스워드는 필수값입니다");
+        }
     }
 
     public boolean matches(String otherPassword) {

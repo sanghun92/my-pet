@@ -65,9 +65,19 @@ public class Member extends BaseTimeEntity
         this.password = Password.of(password);
     }
 
+    public void edit(String nickname, LocalDate birthDay, String phoneNumber) {
+        this.nickname = nickname;
+        this.birthDay = birthDay;
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public void delete() {
         this.deleteHistory.writeDeleteHistory();
+    }
+
+    public boolean isDeleted() {
+        return this.deleteHistory.isDeleted();
     }
 
     @Override

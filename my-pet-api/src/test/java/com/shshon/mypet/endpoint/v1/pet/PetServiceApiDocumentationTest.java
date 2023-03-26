@@ -54,8 +54,6 @@ class PetServiceApiDocumentationTest extends ApiDocumentationTest {
 
     @BeforeEach
     public void setUp() {
-        super.setUp();
-
         this.memberEmail = "test@test.com";
         this.categoryId = 1L;
     }
@@ -81,7 +79,7 @@ class PetServiceApiDocumentationTest extends ApiDocumentationTest {
                 multipart(PetPaths.REGISTER_MY_PET)
                         .file(petImage)
                         .file(request)
-                        .header(AUTHORIZATION, auth(memberEmail))
+                        .header(AUTHORIZATION, auth())
                         .contentType(MediaType.MULTIPART_MIXED_VALUE)
         );
 
