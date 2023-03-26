@@ -7,16 +7,16 @@ import java.util.List;
 @Getter
 public class ErrorResponseV1 extends ApiResponseV1<ErrorBody> {
 
-    private ErrorResponseV1(int statusCode, List<String> messages) {
-        super(false, ErrorBody.of(statusCode, messages));
+    private ErrorResponseV1(ErrorBody errorBody) {
+        super(false, errorBody);
     }
 
 
-    public static ErrorResponseV1 from(int statusCode, String message) {
-        return new ErrorResponseV1(statusCode, List.of(message));
+    public static ErrorResponseV1 from(int code, String message) {
+        return new ErrorResponseV1(new ErrorBody(code, message, null));
     }
 
-    public static ErrorResponseV1 from(int statusCode, List<String> message) {
-        return new ErrorResponseV1(statusCode, message);
+    public static ErrorResponseV1 from(int code, String message, List<ErrorBody.ErrorField> errorFields) {
+        return new ErrorResponseV1(new ErrorBody(code, message, errorFields));
     }
 }

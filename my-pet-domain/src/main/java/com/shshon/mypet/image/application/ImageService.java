@@ -25,6 +25,6 @@ public class ImageService {
     }
 
     public ImageDto findByImageKey(ImageMetaData imageMetaData) {
-        return imageManager.retrieve(imageMetaData.getPath().toString());
+        return imageManager.retrieve(imageMetaData.getPath());
     }
 }

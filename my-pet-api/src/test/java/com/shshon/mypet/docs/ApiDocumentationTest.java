@@ -38,8 +38,8 @@ public class ApiDocumentationTest {
     @Autowired
     protected JwtTokenProvider jwtTokenProvider;
 
-    protected String auth(String memberEmail) {
-        return "Bearer " + jwtTokenProvider.createToken(memberEmail);
+    protected String auth() {
+        return "Bearer " + jwtTokenProvider.createToken(null, null);
     }
 
     protected String toJsonString(Object contents) {

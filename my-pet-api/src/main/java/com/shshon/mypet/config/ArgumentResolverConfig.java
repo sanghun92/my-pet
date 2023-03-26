@@ -2,7 +2,7 @@ package com.shshon.mypet.config;
 
 import com.shshon.mypet.advice.clientDecorator.RequestClientArgumentResolver;
 import com.shshon.mypet.advice.requestDecorator.AuthenticationMemberArgumentResolver;
-import com.shshon.mypet.auth.service.AuthQueryService;
+import com.shshon.mypet.auth.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArgumentResolverConfig implements WebMvcConfigurer {
 
-    private final AuthQueryService authQueryService;
+    private final TokenService tokenService;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -27,7 +27,7 @@ public class ArgumentResolverConfig implements WebMvcConfigurer {
 
     @Bean
     public AuthenticationMemberArgumentResolver createAuthenticationPrincipalArgumentResolver() {
-        return new AuthenticationMemberArgumentResolver(authQueryService);
+        return new AuthenticationMemberArgumentResolver(tokenService);
     }
 
     @Bean

@@ -4,13 +4,14 @@ import com.shshon.mypet.auth.domain.EmailVerification;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RefreshToken;
 import com.shshon.mypet.auth.dto.TokenDto;
-import com.shshon.mypet.auth.service.EmailVerificationQueryService;
+import com.shshon.mypet.auth.service.EmailVerificationService;
 import com.shshon.mypet.auth.service.TokenService;
 import com.shshon.mypet.email.application.EmailService;
 import com.shshon.mypet.email.dto.MailMessageDto;
 import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.dto.MemberDto;
-import com.shshon.mypet.member.service.MemberQueryService;
+import com.shshon.mypet.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +31,13 @@ import static org.mockito.Mockito.times;
 class AuthFacadeTest {
 
     @Mock
-    private MemberQueryService memberQueryService;
+    private MemberService memberService;
 
     @Mock
     private TokenService tokenService;
 
     @Mock
-    private EmailVerificationQueryService emailVerificationQueryService;
+    private EmailVerificationService emailVerificationService;
 
     @Mock
     private EmailService emailService;
@@ -44,32 +45,39 @@ class AuthFacadeTest {
     @InjectMocks
     private AuthFacade authFacade;
 
+    private String email;
+    private String password;
+    private Member member;
+    private HttpRequestClient client;
+
+    @BeforeEach
+    void setUp() {
+        this.email = "test@test.com";
+        this.password = "pass1234!";
+        this.member = MemberDto.builder()
+                .id(1L)
+                .email(this.email)
+                .password(this.password)
+                .build()
+                .toMember();
+        this.client = new HttpRequestClient("0.0.0.1", "PC");
+    }
+
     @Test
     @DisplayName("로그인 요청시 인증 후 토큰을 반환한다")
     void loginTest() {
         // given
-        String email = "test@test.com";
-        String password = "pass1234!";
-        HttpRequestClient client = new HttpRequestClient("0.0.0.1");
-        Member member = MemberDto.builder()
-                .id(1L)
-                .email(email)
-                .password(password)
-                .build()
-                .toMember();
         String accessToken = UUID.randomUUID().toString();
-        RefreshToken refreshToken = new RefreshToken(member.getId(), member.getEmail(), "0.0.0.1");
-        given(memberQueryService.findByEmail(email)).willReturn(member);
-        given(tokenService.createAccessTokenBy(email)).willReturn(accessToken);
-        given(tokenService.createRefreshToken(member, client)).willReturn(refreshToken);
+        RefreshToken refreshToken = new RefreshToken(member, client);
+        given(memberService.findByEmail(email)).willReturn(member);
+        given(tokenService.createTokens(member, client)).willReturn(new TokenDto(accessToken, refreshToken));
 
         // when
         TokenDto tokenDto = authFacade.login(email, password, client);
 
         // then
-        then(memberQueryService).should(times(1)).findByEmail(email);
-        then(tokenService).should(times(1)).createAccessTokenBy(email);
-        then(tokenService).should(times(1)).createRefreshToken(member, client);
+        then(memberService).should(times(1)).findByEmail(email);
+        then(tokenService).should(times(1)).createTokens(member, client);
         assertAll(
                 () -> assertThat(tokenDto.accessToken()).isEqualTo(accessToken),
                 () -> assertThat(tokenDto.refreshToken().token()).isEqualTo(refreshToken.token()),
@@ -86,17 +94,19 @@ class AuthFacadeTest {
         String email = "test@test.com";
         String accessToken = UUID.randomUUID().toString();
         String refreshToken = UUID.randomUUID().toString();
-        RefreshToken foundRefreshToken = new RefreshToken(1L, email, "0.0.0.1");
+        HttpRequestClient client = new HttpRequestClient("0.0.0.1", "PC");
+        RefreshToken foundRefreshToken = new RefreshToken(1L, email, client.ip(), client.userAgent());
 
         given(tokenService.findRefreshTokenBy(refreshToken)).willReturn(foundRefreshToken);
-        given(tokenService.createAccessTokenBy(email)).willReturn(accessToken);
+        given(memberService.findById(any(Long.class))).willReturn(member);
+        given(tokenService.createAccessTokenBy(member, client)).willReturn(accessToken);
 
         // when
-        TokenDto tokenDto = authFacade.reIssueToken(refreshToken);
+        TokenDto tokenDto = authFacade.reIssueToken(refreshToken, client);
 
         // then
         then(tokenService).should(times(1)).findRefreshTokenBy(refreshToken);
-        then(tokenService).should(times(1)).createAccessTokenBy(email);
+        then(tokenService).should(times(1)).createAccessTokenBy(member, client);
         assertAll(
                 () -> assertThat(tokenDto.accessToken()).isEqualTo(accessToken),
                 () -> assertThat(tokenDto.refreshToken().token()).isEqualTo(foundRefreshToken.token())
@@ -110,14 +120,14 @@ class AuthFacadeTest {
         String email = "test@test.com";
         EmailVerification emailVerification = EmailVerification.nonCode(email);
         emailVerification.changeCertificationCode();
-        given(emailVerificationQueryService.findByEmail(email)).willReturn(emailVerification);
+        given(emailVerificationService.findByEmail(email)).willReturn(emailVerification);
         willDoNothing().given(emailService).send(any(MailMessageDto.class));
 
         // when
         authFacade.sendEmailVerification(email);
 
         // then
-        then(emailVerificationQueryService).should(times(1)).findByEmail(email);
+        then(emailVerificationService).should(times(1)).findByEmail(email);
         then(emailService).should(times(1)).send(any(MailMessageDto.class));
     }
 
@@ -128,13 +138,13 @@ class AuthFacadeTest {
         String code = UUID.randomUUID().toString();
         String email = "test@test.com";
         EmailVerification emailVerification = EmailVerification.nonCode(email);
-        given(emailVerificationQueryService.findByCode(code)).willReturn(emailVerification);
+        given(emailVerificationService.findByCode(code)).willReturn(emailVerification);
 
         // when
         authFacade.verifyEmail(code);
 
         // then
-        then(emailVerificationQueryService).should(times(1)).findByCode(code);
+        then(emailVerificationService).should(times(1)).findByCode(code);
         assertThat(emailVerification.isVerified()).isTrue();
     }
 }

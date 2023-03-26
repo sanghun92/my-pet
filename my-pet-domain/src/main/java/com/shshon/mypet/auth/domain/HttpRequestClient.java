@@ -1,4 +1,4 @@
 package com.shshon.mypet.auth.domain;
 
-public record HttpRequestClient(String ip) {
+public record HttpRequestClient(String ip, String userAgent) {
 }

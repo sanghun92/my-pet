@@ -15,3 +15,8 @@ operation::auth/sendEmailVerification[snippets='curl-request,request-fields,http
 === 이메일 인증 코드 검증
 
 operation::auth/verifyEmail[snippets='curl-request,query-parameters,http-request,http-response']
+
+[[Auth-토큰-재발급]]
+=== 토큰 재발급 요청
+
+operation::auth/reIssueToken[snippets='curl-request,request-fields,http-request,response-fields-data,http-response']

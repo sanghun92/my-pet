@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class EmailVerificationQueryService {
+public class EmailVerificationService {
 
     private final EmailVerificationRepository emailVerificationRepository;
 

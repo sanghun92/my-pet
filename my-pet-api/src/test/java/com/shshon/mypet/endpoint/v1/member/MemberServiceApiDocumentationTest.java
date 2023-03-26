@@ -2,8 +2,9 @@ package com.shshon.mypet.endpoint.v1.member;
 
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberChangePasswordRequest;
+import com.shshon.mypet.endpoint.v1.member.request.MemberEditProfileRequest;
 import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
-import com.shshon.mypet.member.application.MemberService;
+import com.shshon.mypet.member.application.MemberFacade;
 import com.shshon.mypet.member.dto.MemberDto;
 import com.shshon.mypet.paths.MemberPaths;
 import org.junit.jupiter.api.DisplayName;
@@ -16,20 +17,20 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentRequest;
-import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentResponse;
+import static com.shshon.mypet.docs.util.ApiDocumentUtils.*;
 import static com.shshon.mypet.docs.util.DocumentFormatGenerator.getDateFormat;
+import static com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor.AUTHORIZATION;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
 
     @MockBean
-    private MemberService memberService;
+    private MemberFacade memberFacade;
 
     @Test
     @DisplayName("회원 가입 요청시 회원 생성 후 201 코드로 응답한다")
@@ -51,7 +52,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                 .phoneNumber("01012345678")
                 .birthDay(LocalDate.now())
                 .build();
-        given(memberService.createMember(any(MemberDto.class))).willReturn(memberDto);
+        given(memberFacade.createMember(any(MemberDto.class))).willReturn(memberDto);
 
         // when
         MemberRegisterRequest request = MemberRegisterRequest.builder()
@@ -94,17 +95,16 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
     @DisplayName("회원 비밀번호 변경 요청시 변경 후 200 코드로 응답한다")
     void changeMemberPasswordRequestThenReturnResponse() throws Exception {
         // given
-        MemberChangePasswordRequest request = MemberChangePasswordRequest.builder()
-                .email("test@test.com")
-                .password("NewPassword1234!")
-                .build();
-        willDoNothing().given(memberService).changePassword(any(MemberDto.class));
+        MemberChangePasswordRequest request = new MemberChangePasswordRequest("PrevPassword123!", "NewPassword1234!");
+        willDoNothing().given(memberFacade).changePassword(any(Long.class), any(String.class), any(String.class));
 
         // when
-        ResultActions resultActions = this.mockMvc.perform(put(MemberPaths.CHANGE_PASSWORD)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(toJsonString(request))
+        ResultActions resultActions = this.mockMvc.perform(
+                put(MemberPaths.CHANGE_PASSWORD)
+                        .header(AUTHORIZATION, auth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(toJsonString(request))
         );
 
         // then
@@ -112,9 +112,68 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                 .andDo(document("member/member-change-password",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestHeaders(
+                                authTokenHeader()
+                        ),
                         requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일 주소"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호")
+                                fieldWithPath("prevPassword").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 이전 비밀번호"),
+                                fieldWithPath("newPassword").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 신규 비밀번호")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 프로필 수정 요청시 변경 후 200 코드로 응답한다")
+    void editMemberProfileRequestThenReturnResponse() throws Exception {
+        // given
+        MemberEditProfileRequest request = new MemberEditProfileRequest("신규 닉네임", LocalDate.now(), "01099881234");
+        MemberDto memberDto = MemberDto.builder()
+                .id(1L)
+                .email("test@test.com")
+                .password("myPassword123456!")
+                .nickname(request.nickname())
+                .phoneNumber(request.phoneNumber())
+                .birthDay(request.birthDay())
+                .createdAt(LocalDateTime.of(2022, 2, 1, 13, 54))
+                .build();
+        given(memberFacade.editMember(any(Long.class), eq(request.toMember()))).willReturn(memberDto);
+
+        // when
+        ResultActions resultActions = this.mockMvc.perform(
+                put(MemberPaths.EDIT_PROFILE)
+                        .header(AUTHORIZATION, auth())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(toJsonString(request))
+        );
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(document("member/editMember",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                authTokenHeader()
+                        ),
+                        requestFields(
+                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("2자 이상, 20자 이하의 사용자 닉네임"),
+                                fieldWithPath("birthDay").type(JsonFieldType.STRING).description("사용자 생일")
+                                        .attributes(getDateFormat())
+                                        .optional(),
+                                fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("숫자만 포함 된 사용자 핸드폰 번호")
+                                        .optional()
+                        ),
+                        responseFields(
+                                beneathPath("data").withSubsectionId("data"),
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원 ID"),
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원 Email 주소"),
+                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("birthDay").type(JsonFieldType.STRING).description("회원 생일")
+                                        .attributes(getDateFormat())
+                                        .optional(),
+                                fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("회원 핸드폰 번호")
+                                        .optional(),
+                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("가입 일자")
                         )
                 ));
     }

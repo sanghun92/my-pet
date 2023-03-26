@@ -2,12 +2,10 @@ package com.shshon.mypet.common.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Embeddable
-@Getter
 public class DeleteHistory {
 
     @Column(name = "is_deleted", nullable = false)
@@ -33,5 +31,9 @@ public class DeleteHistory {
     public void writeDeleteHistory() {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public Boolean isDeleted() {
+        return this.isDeleted;
     }
 }

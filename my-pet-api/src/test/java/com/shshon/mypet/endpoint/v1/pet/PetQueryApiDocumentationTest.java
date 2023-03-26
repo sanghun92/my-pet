@@ -49,8 +49,6 @@ class PetQueryApiDocumentationTest extends ApiDocumentationTest {
 
     @BeforeEach
     public void setUp() {
-        super.setUp();
-
         this.userEmail = "test@test.com";
         this.categoryId = 1L;
     }
@@ -90,7 +88,7 @@ class PetQueryApiDocumentationTest extends ApiDocumentationTest {
         // when
         ResultActions resultActions = this.mockMvc.perform(
                 get(PetPaths.FIND_MY_PET)
-                        .header(AUTHORIZATION, auth(userEmail))
+                        .header(AUTHORIZATION, auth())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         );

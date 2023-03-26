@@ -2,11 +2,14 @@ package com.shshon.mypet.auth.domain;
 
 import com.shshon.mypet.auth.exception.AlreadyVerifiedEmailException;
 import com.shshon.mypet.common.domain.BaseTimeEntity;
+import com.shshon.mypet.email.dto.MailMessageDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -55,6 +58,21 @@ public class EmailVerification extends BaseTimeEntity {
 
     public boolean isVerified() {
         return this.verifiedAt != null;
+    }
+
+    public MailMessageDto generateVerificationMailMessage() {
+        String certificationLink = String.format("http://localhost/join/email-verification?code=%s", getCode());
+
+        Map<String, String> attribute = new HashMap<>();
+        attribute.put("name", email);
+        attribute.put("link", certificationLink);
+
+        return MailMessageDto.builder()
+                .to(new String[]{email})
+                .subject("[My Pet] 가입 인증 메일입니다.")
+                .template("memberCertificationMail")
+                .attribute(attribute)
+                .build();
     }
 
     @Override

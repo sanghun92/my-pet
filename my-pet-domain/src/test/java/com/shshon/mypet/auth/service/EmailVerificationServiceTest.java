@@ -18,13 +18,13 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class EmailVerificationQueryServiceTest {
+class EmailVerificationServiceTest {
 
     @Mock
     private EmailVerificationRepository emailVerificationRepository;
 
     @InjectMocks
-    private EmailVerificationQueryService emailVerificationQueryService;
+    private EmailVerificationService emailVerificationService;
 
     @Test
     @DisplayName("주어진 이메일 주소에 해당되는 이메일 인증 코드를 반환한다")
@@ -35,7 +35,7 @@ class EmailVerificationQueryServiceTest {
         given(emailVerificationRepository.findByEmail(email)).willReturn(Optional.of(expectedEmailVerification));
 
         // when
-        EmailVerification emailVerification = emailVerificationQueryService.findByEmail(email);
+        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
 
         // then
         then(emailVerificationRepository).should(times(1)).findByEmail(email);
@@ -52,7 +52,7 @@ class EmailVerificationQueryServiceTest {
         given(emailVerificationRepository.findByCode(code)).willReturn(Optional.of(expectedEmailVerification));
 
         // when
-        EmailVerification emailVerification = emailVerificationQueryService.findByCode(code.toString());
+        EmailVerification emailVerification = emailVerificationService.findByCode(code.toString());
 
         // then
         then(emailVerificationRepository).should(times(1)).findByCode(code);
