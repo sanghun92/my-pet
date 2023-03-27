@@ -72,7 +72,9 @@ const SignUpPage = () => {
       .catch(errors => console.error(errors));
   };
 
-  const sendEmailEmailVerification = () => {};
+  const sendEmailEmailVerification = () => {
+    console.log('구현 필요');
+  };
 
   return (
     <Container maxWidth="sm">

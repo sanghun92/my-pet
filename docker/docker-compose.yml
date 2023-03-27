@@ -1,20 +1,5 @@
 version: "3.9"
 services:
-  db:
-    image: mysql:8.0
-    container_name: my-pet-db
-    restart: always
-    ports:
-      - "13306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mypet
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      TZ: Asia/Seoul
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_general_ci
   redis:
     image: redis:latest
     container_name: my-pet-redis
@@ -22,8 +7,8 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ~/dev/docker/volume/myPetRedis/data:/data
-      - ~/dev/docker/volume/myPetRedis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - /home/ubuntu/project/redis/data:/data
+      - /home/ubuntu/project/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
   proxy:
     image: nginx:latest
@@ -35,7 +20,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
-      - ~/dev/docker/volume/myPetProxy/log/nginx:/var/log/nginx
+      - /home/ubuntu/project/proxy/nginx.conf:/etc/nginx/nginx.conf
+      - /home/ubuntu/project/proxy/keys:/etc/letsencrypt/live/my-pet.o-r.kr/
+      - /home/ubuntu/project/proxy/log/nginx:/var/log/nginx
     environment:
       - TZ=Asia/Seoul
