@@ -19,7 +19,7 @@ public class PetRegisterEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void uploadPetImage(PetRegisterEvent event) {
-        if(isInValidUploadPetImageEvent(event)) {
+        if (isInValidUploadPetImageEvent(event)) {
             return;
         }
 
@@ -30,10 +30,6 @@ public class PetRegisterEventListener {
     }
 
     private boolean isInValidUploadPetImageEvent(PetRegisterEvent event) {
-        if(!event.hasImage()) {
-            return true;
-        }
-
-        return false;
+        return !event.hasImage();
     }
 }
