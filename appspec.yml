@@ -4,6 +4,7 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/project/deploy
+    overwrite: true
 permissions:
   - object: /home/ubuntu/project/deploy/
     owner: ubuntu
