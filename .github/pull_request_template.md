@@ -9,5 +9,6 @@
 <br>
 
 ## Issues
-resolved #
+
+close #
 
