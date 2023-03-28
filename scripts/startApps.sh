@@ -14,8 +14,8 @@ SHELL_SCRIPT_PATH=$(dirname $0)
 PROJECT_NAME="my-pet"
 PROFILE="dev"
 PROJECT_HOME="/home/ubuntu/project"
-FRONT_END_APP_PATH="$PROJECT_HOME/frontend"
-BACK_END_APP_PATH="$PROJECT_HOME/backend"
+FRONT_END_APP_PATH="$PROJECT_HOME/deploy/frontend"
+BACK_END_APP_PATH="$PROJECT_HOME/deploy/backend"
 
 function startAllApps() {
   startFrontEndApp;

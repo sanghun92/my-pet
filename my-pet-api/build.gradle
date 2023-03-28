@@ -35,37 +35,35 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
-test {
+tasks.test {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-asciidoctor {
-    inputs.dir snippetsDir
+tasks.asciidoctor {
     configurations 'asciidoctorExt'
-    dependsOn test
-
-    sources {
-        include("**/index.adoc", "**/common/*.adoc")
-    }
+    dependsOn tasks.test
     baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
 }
 
-asciidoctor.doFirst {
+tasks.asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-asciidoctor.doLast {
+tasks.register("copyDocument") {
+    dependsOn tasks.asciidoctor
     copy {
         from "build/docs/asciidoc"
         into "src/main/resources/static/docs"
     }
 }
 
-build {
-    dependsOn asciidoctor
+tasks.build {
+    dependsOn tasks.copyDocument
 }
 
-jar {
+tasks.jar {
+    dependsOn tasks.copyDocument
     enabled = true
 }
