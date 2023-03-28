@@ -55,20 +55,17 @@ asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-tasks.register('copyDocument', Copy) {
-    dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
+asciidoctor.doLast {
+    copy {
+        from "build/docs/asciidoc"
+        into "src/main/resources/static/docs"
+    }
 }
 
 build {
-    dependsOn copyDocument
+    dependsOn asciidoctor
 }
 
 jar {
     enabled = true
-    from("${asciidoctor.outputDir}") {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        into 'BOOT-INF/classes/static/docs'
-    }
 }

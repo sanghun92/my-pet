@@ -83,7 +83,6 @@ jobs:
       - name: Copy Gradle built files to the deploy folder And Make zip file
         run: |
           mkdir -p deploy/backend
-          cp -r my-pet-api/build/docs deploy/backend/
           cp my-pet-app/build/libs/*.jar deploy/backend/
           cd deploy && zip -r $GITHUB_SHA.zip *
         shell: bash

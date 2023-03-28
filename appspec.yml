@@ -4,14 +4,24 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/project/deploy
-file_exists_behavior: OVERWRITE
+#file_exists_behavior: OVERWRITE
 permissions:
   - object: /home/ubuntu/project/deploy
     owner: ubuntu
     group: ubuntu
     mode: 755
 hooks:
-  AfterInstall:
-    - location: scripts/deploy.sh
-      timeout: 60
+  # Start > ApplicationStop > DownloadBundle > BeforeInstall > Install > AfterInstall > ApplicationStart > ValidateService > End
+  # Start, DownloadBundle, Install, End Event Hook은 스크립팅 불가
+  ApplicationStop:
+    - location: scripts/stopApps.sh
+      timeout: 300
+      runas: ubuntu
+  BeforeInstall:
+    - location: scripts/cleanDeployFiles.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/startApps.sh
+      timeout: 300
       runas: ubuntu
