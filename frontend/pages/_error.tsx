@@ -1,5 +1,5 @@
-import { NextPageContext } from 'next';
 import Error from 'next/error';
+import { NextPageContext } from 'next/dist/shared/lib/utils';
 
 interface Props {
   statusCode: number;

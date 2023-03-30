@@ -1,150 +1,101 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-  Typography,
-} from '@mui/material';
-import StarIcon from '@mui/icons-material/StarBorder';
+// ** MUI Imports
+import Grid from '@mui/material/Grid';
 
-const MainPage = () => {
-  const tiers = [
-    {
-      title: 'Free',
-      price: '0',
-      description: [
-        '10 users included',
-        '2 GB of storage',
-        'Help center access',
-        'Email support',
-      ],
-      buttonText: 'Sign up for free',
-      buttonVariant: 'outlined',
-    },
-    {
-      title: 'Pro',
-      subheader: 'Most popular',
-      price: '15',
-      description: [
-        '20 users included',
-        '10 GB of storage',
-        'Help center access',
-        'Priority email support',
-      ],
-      buttonText: 'Get started',
-      buttonVariant: 'contained',
-    },
-    {
-      title: 'Enterprise',
-      price: '30',
-      description: [
-        '50 users included',
-        '30 GB of storage',
-        'Help center access',
-        'Phone & email support',
-      ],
-      buttonText: 'Contact us',
-      buttonVariant: 'outlined',
-    },
-  ];
+// ** Icons Imports
+import Poll from 'mdi-material-ui/Poll';
+import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
+import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline';
+import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline';
 
+// ** Custom Components Imports
+import CardStatisticsVerticalComponent from '@/core/components/card-statistics/card-stats-vertical';
+
+// ** Styled Component Import
+import ApexChartWrapper from '@/core/styles/libs/react-apexcharts';
+
+// ** Demo Components Imports
+import Table from '@/views/dashboard/Table';
+import Trophy from '@/views/dashboard/Trophy';
+import TotalEarning from '@/views/dashboard/TotalEarning';
+import StatisticsCard from '@/views/dashboard/StatisticsCard';
+import WeeklyOverview from '@/views/dashboard/WeeklyOverview';
+import DepositWithdraw from '@/views/dashboard/DepositWithdraw';
+import SalesByCountries from '@/views/dashboard/SalesByCountries';
+
+const Dashboard = () => {
   return (
-    <>
-      <Container
-        disableGutters
-        maxWidth="sm"
-        component="main"
-        sx={{ pt: 8, pb: 6 }}
-      >
-        <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="text.primary"
-          gutterBottom
-        >
-          Pricing
-        </Typography>
-      </Container>
-      {/* End hero unit */}
-      <Container maxWidth="md" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
-          {tiers.map(tier => (
-            // Enterprise card is full width at sm breakpoint
-            <Grid
-              item
-              key={tier.title}
-              xs={12}
-              sm={tier.title === 'Enterprise' ? 12 : 6}
-              md={4}
-            >
-              <Card>
-                <CardHeader
-                  title={tier.title}
-                  subheader={tier.subheader}
-                  titleTypographyProps={{ align: 'center' }}
-                  action={tier.title === 'Pro' ? <StarIcon /> : null}
-                  subheaderTypographyProps={{
-                    align: 'center',
-                  }}
-                  sx={{
-                    backgroundColor: theme =>
-                      theme.palette.mode === 'light'
-                        ? theme.palette.grey[200]
-                        : theme.palette.grey[700],
-                  }}
-                />
-                <CardContent>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'baseline',
-                      mb: 2,
-                    }}
-                  >
-                    <Typography
-                      component="h2"
-                      variant="h3"
-                      color="text.primary"
-                    >
-                      ${tier.price}
-                    </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                      /mo
-                    </Typography>
-                  </Box>
-                  <ul>
-                    {tier.description.map(line => (
-                      <Typography
-                        component="li"
-                        variant="subtitle1"
-                        align="center"
-                        key={line}
-                      >
-                        {line}
-                      </Typography>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    fullWidth
-                    variant={tier.buttonVariant as 'outlined' | 'contained'}
-                  >
-                    {tier.buttonText}
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+    <ApexChartWrapper>
+      <Grid container spacing={6}>
+        <Grid item xs={12} md={4}>
+          <Trophy />
         </Grid>
-      </Container>
-    </>
+        <Grid item xs={12} md={8}>
+          <StatisticsCard />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <WeeklyOverview />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <TotalEarning />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <Grid container spacing={6}>
+            <Grid item xs={6}>
+              <CardStatisticsVerticalComponent
+                stats='$25.6k'
+                icon={<Poll />}
+                color='success'
+                trendNumber='+42%'
+                title='Total Profit'
+                subtitle='Weekly Profit'
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CardStatisticsVerticalComponent
+                stats='$78'
+                title='Refunds'
+                trend='negative'
+                color='secondary'
+                trendNumber='-15%'
+                subtitle='Past Month'
+                icon={<CurrencyUsd />}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CardStatisticsVerticalComponent
+                stats='862'
+                trend='negative'
+                trendNumber='-18%'
+                title='New Project'
+                subtitle='Yearly Project'
+                icon={<BriefcaseVariantOutline />}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CardStatisticsVerticalComponent
+                stats='15'
+                color='warning'
+                trend='negative'
+                trendNumber='-18%'
+                subtitle='Last Week'
+                title='Sales Queries'
+                icon={<HelpCircleOutline />}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <SalesByCountries />
+        </Grid>
+        <Grid item xs={12} md={12} lg={8}>
+          <DepositWithdraw />
+        </Grid>
+        <Grid item xs={12}>
+          <Table />
+        </Grid>
+      </Grid>
+    </ApexChartWrapper>
   );
 };
-export default MainPage;
+
+export default Dashboard;

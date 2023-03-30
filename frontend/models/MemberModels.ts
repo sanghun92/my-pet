@@ -1,10 +1,10 @@
 export interface MemberModel {
-  id?: number;
-  email?: string;
-  nickname?: string;
+  id: number;
+  email: string;
+  nickname: string;
   birthDay?: Date;
-  phoneNumber?: string;
-  createdAt?: Date;
+  phoneNumber: string;
+  createdAt: Date;
 }
 
 export interface EditMemberRequest {

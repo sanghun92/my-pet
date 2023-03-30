@@ -1,35 +1,23 @@
 import * as React from 'react';
-import Document, {
-  DocumentContext,
-  DocumentInitialProps,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from 'next/document';
-import theme from '@/styles/theme';
-import createEmotionCache from '@/styles/createEmotionCache';
+import { Children } from 'react';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import { createEmotionCache } from '@/core/utils/createEmotionCache';
 import createEmotionServer from '@emotion/server/create-instance';
 import { AppType } from 'next/app';
 import { EmotionCache } from '@emotion/cache';
 
-interface DocumentProps extends DocumentInitialProps {
-  emotionStyleTags: React.ReactNode[];
-}
-
-const MyDocument = (props: DocumentProps) => {
+const MyDocument = () => {
   return (
     <Html>
       <Head>
-        {/* PWA primary color */}
-        <meta name="theme-color" content={theme.palette.primary.main} />
-        {/*<link rel="shortcut icon" href="/static/favicon.ico" />*/}
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' />
         <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          rel='stylesheet'
+          href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
         />
-        {/* Inject MUI styles first to match with the prepend: true configuration. */}
-        {props.emotionStyleTags}
+        <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon.png' />
+        <link rel='shortcut icon' href='/images/favicon.png' />
       </Head>
       <body>
         <Main />
@@ -41,9 +29,7 @@ const MyDocument = (props: DocumentProps) => {
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with static-site generation (SSG).
-MyDocument.getInitialProps = async (
-  ctx: DocumentContext,
-): Promise<DocumentProps> => {
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   // Resolution order
   //
   // On the server:
@@ -75,9 +61,7 @@ MyDocument.getInitialProps = async (
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (
-        App: AppType | React.ComponentType<{ emotionCache: EmotionCache }>,
-      ) =>
+      enhanceApp: (App: AppType | React.ComponentType<{ emotionCache: EmotionCache }>) =>
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />;
         },
@@ -98,7 +82,7 @@ MyDocument.getInitialProps = async (
 
   return {
     ...initialProps,
-    emotionStyleTags,
+    styles: [...Children.toArray(initialProps.styles), ...emotionStyleTags],
   };
 };
 
