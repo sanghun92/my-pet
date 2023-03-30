@@ -9,6 +9,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtTokenProviderImpl implements JwtTokenProvider {
 
     private final Key accessTokenSecretKey;
@@ -53,6 +55,9 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
             parseClaims(token).getExpiration().before(new Date());
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(e.getMessage());
+            }
             return false;
         }
     }

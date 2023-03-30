@@ -4,12 +4,15 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
 public abstract class ApiResponseV1<T> {
 
     private final LocalDateTime timestamp = LocalDateTime.now();
+    private final ZonedDateTime timestamp_kst = ZonedDateTime.of(timestamp, ZoneId.of("Asia/Seoul"));
     private final boolean success;
     private final T data;
 
@@ -28,6 +31,10 @@ public abstract class ApiResponseV1<T> {
 
     public static ErrorResponseV1 clientError(String message) {
         return ErrorResponseV1.from(HttpStatus.BAD_REQUEST.value(), message);
+    }
+
+    public static ErrorResponseV1 clientError(String message, HttpStatus httpStatus) {
+        return ErrorResponseV1.from(httpStatus.value(), message);
     }
 
     public static ErrorResponseV1 clientError(String message, List<ErrorBody.ErrorField> errorFields) {

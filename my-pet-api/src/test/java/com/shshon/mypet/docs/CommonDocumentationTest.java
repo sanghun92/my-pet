@@ -2,9 +2,9 @@ package com.shshon.mypet.docs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.shshon.mypet.docs.snippet.CustomResponseFieldsSnippet;
-import com.shshon.mypet.endpoint.v1.response.OkResponseV1;
 import com.shshon.mypet.endpoint.v1.common.Docs;
 import com.shshon.mypet.endpoint.v1.common.EnumViewController;
+import com.shshon.mypet.endpoint.v1.response.OkResponseV1;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.restdocs.payload.FieldDescriptor;
@@ -37,10 +37,11 @@ public class CommonDocumentationTest extends ApiDocumentationTest {
         resultActions.andExpect(status().isOk())
                 .andDo(document("common",
                         responseFields(
-                            attributes(key("title").value("공통 응답")),
-                            fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                            fieldWithPath("timestamp").type(JsonFieldType.STRING).description("응답 일자"),
-                            subsectionWithPath("data").type(JsonFieldType.OBJECT).description("데이터").optional()
+                                attributes(key("title").value("공통 응답")),
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                                fieldWithPath("timestamp").type(JsonFieldType.STRING).description("응답 일자"),
+                                fieldWithPath("timestamp_kst").type(JsonFieldType.STRING).description("(한국 기준) 응답 일자"),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("데이터").optional()
                         ),
                         customResponseFields("custom-response", beneathPath("data.petBodyTypes").withSubsectionId("petBodyTypes"),
                                 attributes(key("title").value("bodyType")),
@@ -59,7 +60,8 @@ public class CommonDocumentationTest extends ApiDocumentationTest {
 
     private Docs getData(MvcResult mvcResult) throws IOException {
         OkResponseV1<Docs> apiResponse = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                new TypeReference<OkResponseV1<Docs>>() {});
+                new TypeReference<OkResponseV1<Docs>>() {
+                });
         return apiResponse.getData();
     }
 

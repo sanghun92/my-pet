@@ -21,7 +21,7 @@ public class MemberQueryApi {
 
     private final MemberFacade memberFacade;
 
-    @GetMapping("/v1/members/mine")
+    @GetMapping(value = "/v1/members/mine", consumes = MediaType.ALL_VALUE)
     public MemberResponse findMemberProfile(@AuthenticationMember LoginMember member) {
         MemberDto memberDto = memberFacade.findMember(member.id());
         return MemberResponse.from(memberDto);

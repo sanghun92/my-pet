@@ -14,9 +14,11 @@ public class EmailVerificationService {
 
     private final EmailVerificationRepository emailVerificationRepository;
 
-    public EmailVerification findByEmail(String email) {
+    public EmailVerification findByEmailOrNew(String email) {
         EmailVerification emailVerification = emailVerificationRepository.findByEmail(email)
-                .orElseGet(() -> EmailVerification.nonCode(email));
+                .orElseGet(
+                        () -> emailVerificationRepository.save(EmailVerification.randomCode(email))
+                );
         emailVerification.changeCertificationCode();
         return emailVerification;
     }

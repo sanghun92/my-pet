@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
@@ -35,11 +36,12 @@ public class V1ExceptionResponseDecorator implements ErrorController {
     @GetMapping
     public ResponseEntity<ErrorResponseV1> handleError(HttpServletRequest request) {
         Object exception = request.getAttribute(SERVLET_EXCEPTION);
-        if(exception instanceof Exception) {
+        if (exception instanceof Exception) {
             return handleException(request, (Exception) exception);
         }
 
         HttpStatus status = ApiV1ExceptionHandler.getStatus(request);
+        ApiV1ExceptionHandler.requestLog(log, request, status, null);
         return new ResponseEntity<>(ApiResponseV1.serverError("unhandled exception"), status);
     }
 
@@ -66,7 +68,7 @@ public class V1ExceptionResponseDecorator implements ErrorController {
                                                                                     HttpMediaTypeNotSupportedException ex) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
-        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
+        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage(), httpStatus);
         return new ResponseEntity<>(response, httpStatus);
     }
 
@@ -75,7 +77,16 @@ public class V1ExceptionResponseDecorator implements ErrorController {
                                                                                         HttpRequestMethodNotSupportedException ex) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
-        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage());
+        ErrorResponseV1 response = ApiResponseV1.clientError(ex.getMessage(), httpStatus);
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponseV1> handleNoHandlerFoundException(HttpServletRequest request,
+                                                                         NoHandlerFoundException ex) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiV1ExceptionHandler.requestLog(log, request, httpStatus, ex);
+        ErrorResponseV1 response = ApiResponseV1.clientError("Not Found", httpStatus);
         return new ResponseEntity<>(response, httpStatus);
     }
 

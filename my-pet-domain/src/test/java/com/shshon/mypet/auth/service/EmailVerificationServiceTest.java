@@ -31,11 +31,11 @@ class EmailVerificationServiceTest {
     void findByEmailTest() {
         // given
         String email = "test@test.com";
-        EmailVerification expectedEmailVerification = EmailVerification.nonCode(email);
+        EmailVerification expectedEmailVerification = EmailVerification.randomCode(email);
         given(emailVerificationRepository.findByEmail(email)).willReturn(Optional.of(expectedEmailVerification));
 
         // when
-        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
+        EmailVerification emailVerification = emailVerificationService.findByEmailOrNew(email);
 
         // then
         then(emailVerificationRepository).should(times(1)).findByEmail(email);
@@ -48,7 +48,7 @@ class EmailVerificationServiceTest {
         // given
         UUID code = UUID.randomUUID();
         String email = "test@test.com";
-        EmailVerification expectedEmailVerification = EmailVerification.nonCode(email);
+        EmailVerification expectedEmailVerification = EmailVerification.randomCode(email);
         given(emailVerificationRepository.findByCode(code)).willReturn(Optional.of(expectedEmailVerification));
 
         // when

@@ -42,15 +42,15 @@ public class AuthFacade {
         return new TokenDto(newAccessToken, foundRefreshToken);
     }
 
-    @Transactional(readOnly = true)
-    public void sendEmailVerification(String email) {
+    @Transactional
+    public void sendEmailVerificationCode(String email) {
         log.info("이메일 인증 발송 요청 - email : {}", email);
-        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
+        EmailVerification emailVerification = emailVerificationService.findByEmailOrNew(email);
         emailService.send(emailVerification.generateVerificationMailMessage());
     }
 
     @Transactional
-    public void verifyEmail(String code) {
+    public void verifyEmailVerificationCode(String code) {
         log.info("이메일 인증 요청 - code : {}", code);
         EmailVerification emailVerification = emailVerificationService.findByCode(code);
         emailVerification.verify();

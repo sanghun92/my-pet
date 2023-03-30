@@ -12,7 +12,7 @@ class EmailVerificationTest {
     @DisplayName("이메일 인증에 성공한다")
     void onCertificateMemberTest() {
         // given
-        EmailVerification emailVerification = EmailVerification.nonCode("test@test.com");
+        EmailVerification emailVerification = EmailVerification.randomCode("test@test.com");
         boolean beforeOnCertificatedMember = emailVerification.isVerified();
 
         // when

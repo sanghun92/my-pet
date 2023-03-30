@@ -37,8 +37,8 @@ public class EmailVerification extends BaseTimeEntity {
         this.verifiedAt = verifiedAt;
     }
 
-    public static EmailVerification nonCode(String email) {
-        return new EmailVerification(email, null, null);
+    public static EmailVerification randomCode(String email) {
+        return new EmailVerification(email, UUID.randomUUID(), null);
     }
 
     public void changeCertificationCode() {

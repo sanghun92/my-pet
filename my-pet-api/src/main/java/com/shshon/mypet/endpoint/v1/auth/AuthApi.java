@@ -36,14 +36,14 @@ public class AuthApi {
     }
 
     @PostMapping("/v1/auth/verification")
-    public ApiResponseV1<?> sendEmailVerification(@RequestBody String email) {
-        authFacade.sendEmailVerification(email);
+    public ApiResponseV1<?> sendEmailVerificationCode(@RequestBody String email) {
+        authFacade.sendEmailVerificationCode(email);
         return ApiResponseV1.ok();
     }
 
     @GetMapping(value = "/v1/auth/verification", consumes = MediaType.ALL_VALUE)
-    public void verifyEmail(@RequestParam("code") String code) {
-        authFacade.verifyEmail(code);
+    public void verifyEmailVerificationCode(@RequestParam("code") String code) {
+        authFacade.verifyEmailVerificationCode(code);
     }
 
     @PostMapping("/v1/auth/token")

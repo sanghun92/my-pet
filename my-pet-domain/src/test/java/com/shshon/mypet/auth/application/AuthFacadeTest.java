@@ -118,16 +118,16 @@ class AuthFacadeTest {
     void sendCertificatedEmailWhenMemberIsJoinedTest() {
         // given
         String email = "test@test.com";
-        EmailVerification emailVerification = EmailVerification.nonCode(email);
+        EmailVerification emailVerification = EmailVerification.randomCode(email);
         emailVerification.changeCertificationCode();
-        given(emailVerificationService.findByEmail(email)).willReturn(emailVerification);
+        given(emailVerificationService.findByEmailOrNew(email)).willReturn(emailVerification);
         willDoNothing().given(emailService).send(any(MailMessageDto.class));
 
         // when
-        authFacade.sendEmailVerification(email);
+        authFacade.sendEmailVerificationCode(email);
 
         // then
-        then(emailVerificationService).should(times(1)).findByEmail(email);
+        then(emailVerificationService).should(times(1)).findByEmailOrNew(email);
         then(emailService).should(times(1)).send(any(MailMessageDto.class));
     }
 
@@ -137,11 +137,11 @@ class AuthFacadeTest {
         // given
         String code = UUID.randomUUID().toString();
         String email = "test@test.com";
-        EmailVerification emailVerification = EmailVerification.nonCode(email);
+        EmailVerification emailVerification = EmailVerification.randomCode(email);
         given(emailVerificationService.findByCode(code)).willReturn(emailVerification);
 
         // when
-        authFacade.verifyEmail(code);
+        authFacade.verifyEmailVerificationCode(code);
 
         // then
         then(emailVerificationService).should(times(1)).findByCode(code);

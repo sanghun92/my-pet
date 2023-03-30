@@ -41,35 +41,32 @@ test {
 }
 
 asciidoctor {
-    dependsOn test
     configurations 'asciidoctorExt'
     baseDirFollowsSourceFile()
     inputs.dir snippetsDir
+    dependsOn test
 }
 
 asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-tasks.register("copyDocument", Copy.class) {
-    dependsOn asciidoctor
-
-    from file("build/docs/asciidoc/")
-    into file("src/main/resources/static/docs")
+asciidoctor.doLast {
+    copy {
+        from file("build/docs/asciidoc")
+        into file("src/main/resources/static/docs")
+    }
 }
 
 build {
-    dependsOn copyDocument
-}
-
-clean {
-    delete file('src/main/resources/static')
+    dependsOn asciidoctor
 }
 
 jar {
     dependsOn asciidoctor
 
     from(asciidoctor.outputDir) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         into("static/docs")
     }
 }
