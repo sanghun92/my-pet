@@ -61,6 +61,7 @@ jobs:
           cp -r frontend/package.json deploy/frontend/
           cp -r frontend/ecosystem.config.js deploy/frontend/
           cp -r frontend/.env.production deploy/frontend/
+          cp -r frontend/public deploy/frontend/
           cp -r frontend/.next deploy/frontend/
         shell: bash
 
