@@ -5,6 +5,7 @@ import com.shshon.mypet.common.domain.BaseTimeEntity;
 import com.shshon.mypet.email.dto.MailMessageDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmailVerification extends BaseTimeEntity {
 

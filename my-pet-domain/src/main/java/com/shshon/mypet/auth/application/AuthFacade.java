@@ -9,6 +9,7 @@ import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.auth.service.EmailVerificationService;
 import com.shshon.mypet.auth.service.TokenService;
 import com.shshon.mypet.email.application.EmailService;
+import com.shshon.mypet.email.dto.MailMessageDto;
 import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.service.MemberService;
 import com.shshon.mypet.util.CacheNames;
@@ -49,15 +50,22 @@ public class AuthFacade {
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheNames.EMAIL_VERIFICATION, key = "#email")
     public EmailVerificationDto findEmailVerificationBy(String email) {
-        EmailVerification emailVerification = emailVerificationService.findByEmailOrDefault(email, EmailVerification::empty);
+        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
         return EmailVerificationDto.from(emailVerification);
     }
 
     @Transactional
-    public void sendEmailVerificationCode(String email) {
-        log.info("이메일 인증 발송 요청 - email : {}", email);
-        EmailVerification emailVerification = emailVerificationService.createEmailVerification(email);
-        emailService.send(emailVerification.generateVerificationMailMessage());
+    public EmailVerificationDto generateEmailVerificationCode(String email) {
+        log.info("이메일 인증 코드 생성 요청 - email : {}", email);
+        EmailVerification emailVerification = emailVerificationService.generateEmailVerificationCode(email);
+        return EmailVerificationDto.from(emailVerification);
+    }
+
+    @Transactional
+    public void sendEmailVerificationCode(EmailVerificationDto emailVerification, String url) {
+        log.info("이메일 인증 발송 요청 - url : {}", url);
+        MailMessageDto mailMessageDto = emailVerificationService.generateVerifyCodeMailMessage(emailVerification, url);
+        emailService.send(mailMessageDto);
     }
 
     @Transactional

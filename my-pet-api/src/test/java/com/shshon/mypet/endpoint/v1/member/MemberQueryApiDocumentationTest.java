@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.*;
 import static com.shshon.mypet.docs.util.DocumentFormatGenerator.getDateFormat;
@@ -50,7 +51,7 @@ class MemberQueryApiDocumentationTest extends ApiDocumentationTest {
                 .birthDay(LocalDate.now())
                 .createdAt(LocalDateTime.of(2022, 2, 1, 13, 54))
                 .build();
-        EmailVerificationDto emailVerificationDto = new EmailVerificationDto(LocalDateTime.now(), true);
+        EmailVerificationDto emailVerificationDto = new EmailVerificationDto(UUID.randomUUID().toString(), memberDto.email(), LocalDateTime.now(), true);
         given(memberFacade.findMemberProfileBy(any(Long.class))).willReturn(memberDto);
         given(authFacade.findEmailVerificationBy(any(String.class))).willReturn(emailVerificationDto);
 

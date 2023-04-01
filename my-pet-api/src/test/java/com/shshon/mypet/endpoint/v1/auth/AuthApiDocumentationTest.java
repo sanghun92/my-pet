@@ -3,9 +3,11 @@ package com.shshon.mypet.endpoint.v1.auth;
 import com.shshon.mypet.auth.application.AuthFacade;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RefreshToken;
+import com.shshon.mypet.auth.dto.EmailVerificationDto;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
+import com.shshon.mypet.endpoint.v1.auth.request.SendEmailVerificationCodeRequest;
 import com.shshon.mypet.endpoint.v1.auth.request.TokenReIssueRequest;
 import com.shshon.mypet.paths.AuthPaths;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.shshon.mypet.docs.util.ApiDocumentUtils.getDocumentRequest;
@@ -85,13 +86,14 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
     @DisplayName("이메일 인증 요청시 해당 이메일 주소로 메일링 후 200 코드로 응답한다")
     void sendEmailVerificationRequestThenReturnResponse() throws Exception {
         // given
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("email", "test@test.com");
+        SendEmailVerificationCodeRequest request = new SendEmailVerificationCodeRequest("test@test.com");
+        EmailVerificationDto emailVerificationDto = new EmailVerificationDto(UUID.randomUUID().toString(), request.email(), LocalDateTime.now(), true);
+        given(authFacade.generateEmailVerificationCode(any(String.class))).willReturn(emailVerificationDto);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
                 post(AuthPaths.SEND_EMAIL_VERIFICATION)
-                        .content(toJsonString(requestBody))
+                        .content(toJsonString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         );

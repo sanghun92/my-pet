@@ -46,13 +46,15 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 const schema = yup.object().shape({
-  nickname: yup
-    .string()
-    .min(2, '닉네임은 2자 이상, 20자 이하의 닉네임이어야 합니다')
-    .max(20, '닉네임은 2자 이상, 20자 이하의 닉네임이어야 합니다')
-    .required('닉네임을 입력해주세요'),
-  phoneNumber: yup.string().required("핸드폰 번호는 '-'없이 숫자만 입력해주세요"),
-  birthDay: yup.date(),
+  profile: yup.object().shape({
+    nickname: yup
+      .string()
+      .min(2, '닉네임은 2자 이상, 20자 이하의 닉네임이어야 합니다')
+      .max(20, '닉네임은 2자 이상, 20자 이하의 닉네임이어야 합니다')
+      .required('닉네임을 입력해주세요'),
+    phoneNumber: yup.string().required("핸드폰 번호는 '-'없이 숫자만 입력해주세요"),
+    birthDay: yup.date(),
+  }),
 });
 
 const TabMemberProfile = () => {
@@ -124,7 +126,7 @@ const TabMemberProfile = () => {
             <TextField
               fullWidth
               id='email'
-              name='email'
+              name='profile.email'
               label='Email (Read Only)'
               defaultValue={memberState.profile.email}
               InputProps={{
@@ -137,7 +139,7 @@ const TabMemberProfile = () => {
               methods={methods}
               fullWidth
               id='nickname'
-              name='nickname'
+              name='profile.nickname'
               label='닉네임'
               placeholder='2~20자 이내로 입력해주세요'
               defaultValue={memberState.profile.nickname}
@@ -148,7 +150,7 @@ const TabMemberProfile = () => {
               methods={methods}
               fullWidth
               id='phoneNumber'
-              name='phoneNumber'
+              name='profile.phoneNumber'
               label='핸드폰 번호'
               placeholder="'-'없이 숫자만 입력해주세요"
               defaultValue={memberState.profile.phoneNumber}
@@ -158,7 +160,7 @@ const TabMemberProfile = () => {
             <FormDateField
               methods={methods}
               dateFormat='yyyy-MM-dd'
-              name='birthDay'
+              name='profile.birthDay'
               defaultValue={memberState.profile.birthDay}
               customFieldProps={{
                 id: 'birthDay',

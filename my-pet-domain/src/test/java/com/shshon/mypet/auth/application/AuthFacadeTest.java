@@ -3,6 +3,7 @@ package com.shshon.mypet.auth.application;
 import com.shshon.mypet.auth.domain.EmailVerification;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RefreshToken;
+import com.shshon.mypet.auth.dto.EmailVerificationDto;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.auth.service.EmailVerificationService;
 import com.shshon.mypet.auth.service.TokenService;
@@ -114,20 +115,20 @@ class AuthFacadeTest {
     }
 
     @Test
-    @DisplayName("회원 가입시 이메일 인증 메일을 보낸다.")
-    void sendCertificatedEmailWhenMemberIsJoinedTest() {
+    @DisplayName("이메일 인증 코드를 메일 전송하는데 성공한다")
+    void sendEmailVerificationCodeWhenMemberIsJoinedTest() {
         // given
         String email = "test@test.com";
         EmailVerification emailVerification = EmailVerification.randomCode(email);
-        emailVerification.changeCertificationCode();
-        given(emailVerificationService.createEmailVerification(email)).willReturn(emailVerification);
+        String url = "http://localhost/join/email-verification?code=" + emailVerification.getCode() + "&email=" + emailVerification.getEmail();
+        given(emailVerificationService.generateVerifyCodeMailMessage(any(EmailVerificationDto.class), eq(url))).willReturn(MailMessageDto.builder().build());
         willDoNothing().given(emailService).send(any(MailMessageDto.class));
 
         // when
-        authFacade.sendEmailVerificationCode(email);
+        authFacade.sendEmailVerificationCode(EmailVerificationDto.from(emailVerification), url);
 
         // then
-        then(emailVerificationService).should(times(1)).createEmailVerification(email);
+        then(emailVerificationService).should(times(1)).generateVerifyCodeMailMessage(any(EmailVerificationDto.class), eq(url));
         then(emailService).should(times(1)).send(any(MailMessageDto.class));
     }
 

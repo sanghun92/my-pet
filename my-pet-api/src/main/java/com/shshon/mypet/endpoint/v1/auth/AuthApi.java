@@ -3,8 +3,10 @@ package com.shshon.mypet.endpoint.v1.auth;
 import com.shshon.mypet.auth.application.AuthFacade;
 import com.shshon.mypet.auth.domain.HttpRequestClient;
 import com.shshon.mypet.auth.domain.RequestClient;
+import com.shshon.mypet.auth.dto.EmailVerificationDto;
 import com.shshon.mypet.auth.dto.TokenDto;
 import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
+import com.shshon.mypet.endpoint.v1.auth.request.SendEmailVerificationCodeRequest;
 import com.shshon.mypet.endpoint.v1.auth.request.TokenReIssueRequest;
 import com.shshon.mypet.endpoint.v1.auth.response.TokenResponse;
 import com.shshon.mypet.endpoint.v1.response.ApiResponseV1;
@@ -16,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping(
@@ -36,8 +40,14 @@ public class AuthApi {
     }
 
     @PostMapping("/v1/auth/verification")
-    public ApiResponseV1<?> sendEmailVerificationCode(@RequestBody String email) {
-        authFacade.sendEmailVerificationCode(email);
+    public ApiResponseV1<?> sendEmailVerificationCode(@RequestBody SendEmailVerificationCodeRequest request) {
+        EmailVerificationDto emailVerificationDto = authFacade.generateEmailVerificationCode(request.email());
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl("https://my-pet.o-r.kr/")
+                .path("join/email-verification")
+                .queryParam("code", emailVerificationDto.code())
+                .queryParam("email", emailVerificationDto.email())
+                .build(true);
+        authFacade.sendEmailVerificationCode(emailVerificationDto, uri.toUriString());
         return ApiResponseV1.ok();
     }
 
