@@ -52,6 +52,9 @@ public class EmailVerification extends BaseTimeEntity {
     }
 
     public String getCode() {
+        if (this.code == null) {
+            return null;
+        }
         return this.code.toString();
     }
 

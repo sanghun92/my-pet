@@ -50,7 +50,7 @@ public class AuthFacade {
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheNames.EMAIL_VERIFICATION, key = "#email")
     public EmailVerificationDto findEmailVerificationBy(String email) {
-        EmailVerification emailVerification = emailVerificationService.findByEmail(email);
+        EmailVerification emailVerification = emailVerificationService.findByEmailOrElse(email, EmailVerification::empty);
         return EmailVerificationDto.from(emailVerification);
     }
 

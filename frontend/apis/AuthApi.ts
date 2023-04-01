@@ -23,7 +23,11 @@ export const postReIssueToken = async (refreshToken: string) => {
 };
 
 export const postSendEmailVerificationCode = async (email: string) => {
-  return httpClient.post<NonDataResponse>('/v1/auth/verification', email).then(res => res.data);
+  return httpClient
+    .post<NonDataResponse>('/v1/auth/verification', {
+      email: email,
+    })
+    .then(res => res.data);
 };
 
 export const getVerifyEmailCodeResult = async (code: string) => {

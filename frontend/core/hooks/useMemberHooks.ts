@@ -50,7 +50,6 @@ export const useUpdateMember = (
   const setMember = useSetRecoilState(memberState);
   return useMutation(
     (member): Promise<GenericResponse<MemberModel>> => {
-      debugger;
       return putMember({
         ...member.profile,
         birthDay: member.profile.birthDay ? format(member.profile.birthDay, 'yyyy-MM-dd', { locale: ko }) : undefined,

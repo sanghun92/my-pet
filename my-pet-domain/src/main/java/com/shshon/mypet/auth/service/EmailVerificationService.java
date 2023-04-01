@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +21,6 @@ public class EmailVerificationService {
     private final EmailVerificationRepository emailVerificationRepository;
 
     public EmailVerification generateEmailVerificationCode(String email) {
-        return emailVerificationRepository.save(EmailVerification.randomCode(email));
-    }
-
-    public EmailVerification createEmailVerification(String email) {
         Optional<EmailVerification> optionalEmailVerification = emailVerificationRepository.findByEmail(email);
         EmailVerification emailVerification;
         if (optionalEmailVerification.isPresent()) {
@@ -42,9 +39,9 @@ public class EmailVerificationService {
                 .orElseThrow(EmailVerificationNotFoundException::new);
     }
 
-    public EmailVerification findByEmail(String email) {
+    public EmailVerification findByEmailOrElse(String email, Supplier<EmailVerification> emailVerificationSupplier) {
         return emailVerificationRepository.findByEmail(email)
-                .orElseThrow(EmailVerificationNotFoundException::new);
+                .orElseGet(emailVerificationSupplier);
     }
 
     public void deleteAllByEmailAndVerifiedAtIsNull(String email) {
