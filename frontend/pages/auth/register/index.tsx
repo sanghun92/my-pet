@@ -28,18 +28,16 @@ import themeConfig from '@/configs/themeConfig';
 import BlankLayout from '@/core/layouts/BlankLayout';
 
 // ** Demo Imports
+import router from 'next/router';
 import FooterIllustrationsV1 from '@/views/pages/auth/FooterIllustration';
 import * as yup from 'yup';
-import { useLogin, useRegister } from '@/core/hooks/useAuthHooks';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import FormTextField from '@/core/components/field/FormTextField';
-import FormCheckBoxField from '@/core/components/field/FormCheckBoxField';
 import Path from '@/navigation/NavigationPaths';
-import FormDateField from '@/core/components/field/FormDateField';
-import router from 'next/router';
+import { useLogin, useRegister } from '@/core/hooks/useAuthHooks';
+import { FormCheckBoxField, FormDateField, FormTextField } from '@/core/components/field';
+import { MemberRegisterState } from '@/core/models/AuthModels';
 import { showMessage } from '@/utils/SnackbarUtils';
-import { MemberRegisterState } from '@/models/AuthModels';
 
 const schema = yup.object().shape({
   email: yup.string().email().required('이메일을 입력해주세요'),
@@ -294,6 +292,13 @@ const RegisterPage = () => {
                 <Google sx={{ color: '#db4437' }} />
               </IconButton>
             </Link>
+          </Box>
+          <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Typography variant='body2'>
+              <Link passHref legacyBehavior href={Path.ROOT}>
+                <LinkStyled>다음에 가입 할게요</LinkStyled>
+              </Link>
+            </Typography>
           </Box>
         </CardContent>
       </Card>

@@ -13,11 +13,11 @@ import MuiTab, { TabProps } from '@mui/material/Tab';
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline';
 import LockOpenOutline from 'mdi-material-ui/LockOpenOutline';
-import InformationOutline from 'mdi-material-ui/InformationOutline';
+import Paw from 'mdi-material-ui/Paw';
 
 // ** Demo Tabs Imports
-import TabInfo from '@/views/members/profile/TabInfo';
-import TabAccount from '@/views/members/profile/TabAccount';
+import TabMemberPet from '@/views/members/profile/TabInfo';
+import TabMemberProfile from '@/views/members/profile/TabMemberProfile';
 import TabSecurity from '@/views/members/profile/TabSecurity';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
@@ -40,7 +40,7 @@ const TabName = styled('span')(({ theme }) => ({
 
 const ProfilePage = () => {
   // ** State
-  const [value, setValue] = useState<string>('account');
+  const [value, setValue] = useState<string>('profile');
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -55,11 +55,11 @@ const ProfilePage = () => {
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
           <Tab
-            value='account'
+            value='profile'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline />
-                <TabName>Account</TabName>
+                <TabName>프로필</TabName>
               </Box>
             }
           />
@@ -73,24 +73,24 @@ const ProfilePage = () => {
             }
           />
           <Tab
-            value='info'
+            value='pet'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InformationOutline />
-                <TabName>Info</TabName>
+                <Paw />
+                <TabName>반려동물</TabName>
               </Box>
             }
           />
         </TabList>
 
-        <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
+        <TabPanel sx={{ p: 0 }} value='profile'>
+          <TabMemberProfile />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
         </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
+        <TabPanel sx={{ p: 0 }} value='pet'>
+          <TabMemberPet />
         </TabPanel>
       </TabContext>
     </Card>

@@ -1,11 +1,11 @@
 import { useMutation, UseMutationOptions } from 'react-query';
-import { requestSendEmailVerificationCode, requestSignIn, requestSignUp } from '@/apis/AuthApi';
+import { postSendEmailVerificationCode, postSignIn, postSignUp } from '@/apis/AuthApi';
 import { showError, showErrorMessage } from '@/utils/SnackbarUtils';
-import { MemberRegisterState, SignInRequest, TokenResponse } from '@/models/AuthModels';
 import { AxiosError } from 'axios';
-import { ErrorResponse, GenericResponse, NonDataResponse } from '@/models/ResponseModels';
+import { ErrorResponse, GenericResponse, NonDataResponse } from '@/core/models/ResponseModels';
+import { MemberRegisterState, SignInRequest, TokenResponse } from '@/core/models/AuthModels';
 import { useSetRecoilState } from 'recoil';
-import { setAccessToken } from '@/utils/TokenManager';
+import { getJwtPayload, setAccessToken } from '@/utils/TokenManager';
 import { authState } from '@/core/recoil/auth/atoms';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -15,13 +15,14 @@ export const useLogin = (
 ) => {
   const setAuth = useSetRecoilState(authState);
 
-  return useMutation((req): Promise<GenericResponse<TokenResponse>> => requestSignIn(req), {
+  return useMutation((req): Promise<GenericResponse<TokenResponse>> => postSignIn(req), {
     ...options,
     onSuccess: res => {
       const accessToken = res.data.accessToken;
       setAuth({
         accessToken: accessToken,
         isLoggedIn: true,
+        jwtPayload: getJwtPayload(res.data.accessToken),
       });
       setAccessToken(accessToken);
     },
@@ -39,7 +40,7 @@ export const useRegister = (
 ) => {
   return useMutation(
     (member): Promise<NonDataResponse> =>
-      requestSignUp({
+      postSignUp({
         ...member,
         birthDay: member.birthDay ? format(member.birthDay, 'yyyy-MM-dd', { locale: ko }) : undefined,
       }),
@@ -55,7 +56,7 @@ export const useRegister = (
 export const useSendEmailVerificationCode = (
   options: UseMutationOptions<NonDataResponse, AxiosError<ErrorResponse>, string> = {},
 ) => {
-  return useMutation((req): Promise<NonDataResponse> => requestSendEmailVerificationCode(req), {
+  return useMutation((req): Promise<NonDataResponse> => postSendEmailVerificationCode(req), {
     ...options,
     onError: error => {
       showError('인증 코드 전송 실패', error);

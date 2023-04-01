@@ -1,9 +1,9 @@
 import { useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from 'react-query';
-import { getMember, putMember } from '@/apis/MemberApi';
+import { getMember, putMember, putMemberPassword } from '@/apis/MemberApi';
 import { showError } from '@/utils/SnackbarUtils';
 import { AxiosError } from 'axios';
-import { MemberModel } from '@/models/MemberModels';
-import { ErrorResponse, GenericResponse } from '@/models/ResponseModels';
+import { ChangePasswordRequest, MemberModel } from '@/core/models/MemberModels';
+import { ErrorResponse, GenericResponse, NonDataResponse } from '@/core/models/ResponseModels';
 import { queries, QueryKeys } from '@/constants/queries';
 import { useSetRecoilState } from 'recoil';
 import { memberState } from '@/core/recoil/member/atoms';
@@ -20,10 +20,20 @@ export const useMemberQuery = (
 ) => {
   return useQuery(queries.members.detail().queryKey, (): Promise<GenericResponse<MemberModel>> => getMember(), {
     select: data => {
+      const profile = data.data.profile;
+      const emailVerification = data.data.emailVerification;
       return {
-        ...data.data,
-        birthDay: data.data.birthDay ? new Date(data.data.birthDay) : undefined,
-        createdAt: new Date(data.data.createdAt),
+        profile: {
+          ...profile,
+          birthDay: profile.birthDay ? new Date(profile.birthDay) : undefined,
+          createdAt: new Date(profile.createdAt),
+        },
+        emailVerification: emailVerification
+          ? {
+              ...emailVerification,
+              verifiedAt: new Date(emailVerification.verifiedAt),
+            }
+          : undefined,
       };
     },
     onError: error => {
@@ -41,8 +51,8 @@ export const useUpdateMember = (
   return useMutation(
     (member): Promise<GenericResponse<MemberModel>> => {
       return putMember({
-        ...member,
-        birthDay: member.birthDay ? format(member.birthDay, 'yyyy-MM-dd', { locale: ko }) : undefined,
+        ...member.profile,
+        birthDay: member.profile.birthDay ? format(member.profile.birthDay, 'yyyy-MM-dd', { locale: ko }) : undefined,
       });
     },
     {
@@ -55,6 +65,22 @@ export const useUpdateMember = (
       },
       onError: error => {
         showError('프로필 수정 실패', error);
+      },
+    },
+  );
+};
+
+export const useChangePassword = (
+  options: UseMutationOptions<NonDataResponse, AxiosError<ErrorResponse>, ChangePasswordRequest> = {},
+) => {
+  return useMutation(
+    (req): Promise<NonDataResponse> => {
+      return putMemberPassword(req);
+    },
+    {
+      ...options,
+      onError: error => {
+        showError('패스워드 변경 실패', error);
       },
     },
   );

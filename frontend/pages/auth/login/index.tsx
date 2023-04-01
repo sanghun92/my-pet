@@ -35,8 +35,8 @@ import Path from '@/navigation/NavigationPaths';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import FormTextField from '@/core/components/field/FormTextField';
-import { SignInForm } from '@/models/AuthModels';
+import { FormTextField } from '@/core/components/field';
+import { SignInForm } from '@/core/models/AuthModels';
 import { useLogin } from '@/core/hooks/useAuthHooks';
 import { showMessage } from '@/utils/SnackbarUtils';
 
@@ -231,6 +231,13 @@ const LoginPage = () => {
               <Typography variant='body2'>
                 <Link passHref legacyBehavior href={Path.AUTH.REGISTER}>
                   <LinkStyled>회원가입</LinkStyled>
+                </Link>
+              </Typography>
+            </Box>
+            <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Typography variant='body2'>
+                <Link passHref legacyBehavior href={Path.ROOT}>
+                  <LinkStyled>다음에 로그인 할게요</LinkStyled>
                 </Link>
               </Typography>
             </Box>

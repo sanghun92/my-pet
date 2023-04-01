@@ -1,11 +1,9 @@
 import { atom } from 'recoil';
-import { AuthModel } from '@/models/AuthModels';
+import { AuthModel } from '@/core/models/AuthModels';
 
 export const authState = atom<AuthModel>({
   key: 'auth/authState',
   default: {
-    accessToken: undefined,
-    isVerifiedEmail: false,
     isLoggedIn: false,
   },
 });

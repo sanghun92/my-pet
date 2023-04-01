@@ -1,4 +1,4 @@
-import { requestVerifyEmailVerificationCode } from '@/apis/AuthApi';
+import { getVerifyEmailCodeResult } from '@/apis/AuthApi';
 import { Container, Divider, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import BlankLayout from '@/core/layouts/BlankLayout';
@@ -45,7 +45,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
   const code = context.query.code;
   let error = false;
   if (typeof code === 'string') {
-    await requestVerifyEmailVerificationCode(code).catch(() => (error = true));
+    await getVerifyEmailCodeResult(code).catch(() => (error = true));
   } else {
     error = true;
   }

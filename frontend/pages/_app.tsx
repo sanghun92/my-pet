@@ -7,40 +7,31 @@ import 'react-datepicker/dist/react-datepicker.css';
 import * as React from 'react';
 import { ReactElement, ReactNode } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
-import { ToastContainer } from 'react-toastify';
-
-// ** Next Imports
+import { ToastContainer } from 'react-toastify'; // ** Next Imports
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
-import { NextPage } from 'next';
-
-// ** Emotion Import
-import { CacheProvider, EmotionCache } from '@emotion/react';
-
-// ** Model Import
-import { AuthModel } from '@/models/AuthModels';
-
-// ** API Import
-import { requestReIssueToken } from '@/apis/AuthApi';
-
-// ** Mui Import
+import { NextPage } from 'next'; // ** Emotion Import
+import { CacheProvider, EmotionCache } from '@emotion/react'; // ** Model Import
+import { AuthModel } from '@/core/models/AuthModels'; // ** API Import
+import { postReIssueToken } from '@/apis/AuthApi'; // ** Mui Import
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
-// ** Layout Import
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'; // ** Layout Import
 import UserLayout from '@/layouts/UserLayout';
 import themeConfig from '@/configs/themeConfig';
 import { SettingsConsumer, SettingsProvider } from '@/core/context/settingsContext';
-import ThemeComponent from '@/core/theme/ThemeComponent';
-
-// ** Recoil Import
+import ThemeComponent from '@/core/theme/ThemeComponent'; // ** Recoil Import
 import { MutableSnapshot, RecoilRoot } from 'recoil';
-import { authState } from '@/core/recoil/auth/atoms';
-
-// ** Util Import
+import { authState } from '@/core/recoil/auth/atoms'; // ** Util Import
 import { createEmotionCache } from '@/core/utils/createEmotionCache';
-import { getAccessToken, getRefreshToken, hasRefreshToken, hasTokens, setAccessToken } from '@/utils/TokenManager';
-import { ko } from 'date-fns/locale';
+import {
+  getAccessToken,
+  getJwtPayload,
+  getRefreshToken,
+  hasAccessToken,
+  hasRefreshToken,
+  setAccessToken,
+} from '@/utils/TokenManager';
+import { ko } from 'date-fns/locale'; // eslint-disable-next-line @typescript-eslint/ban-types
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -126,25 +117,25 @@ MyApp.getInitialProps = async (context: AppContext) => {
   const appProps = await App.getInitialProps(context);
   const { req, res } = context.ctx;
   let authInitState: AuthModel = {
-    accessToken: undefined,
     isLoggedIn: false,
   };
 
-  if (hasTokens({ req, res })) {
-    // Access, Refresh Token 두개다 있는 경우
+  if (hasAccessToken({ req, res })) {
     const accessToken = getAccessToken({ req, res });
     authInitState = {
       accessToken: accessToken,
       isLoggedIn: true,
+      jwtPayload: getJwtPayload(accessToken),
     };
   } else if (hasRefreshToken({ req, res })) {
     // Refresh Token만 있는 경우 Access Token 재발급
     const refreshToken = getRefreshToken({ req, res });
-    await requestReIssueToken(refreshToken)
+    await postReIssueToken(refreshToken)
       .then(res => {
         authInitState = {
           accessToken: res.data.accessToken,
           isLoggedIn: true,
+          jwtPayload: getJwtPayload(res.data.accessToken),
         };
       })
       .catch(errors => console.error(errors));

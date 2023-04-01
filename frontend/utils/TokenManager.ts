@@ -2,6 +2,8 @@ import httpClient from '@/apis/httpClient';
 import { deleteCookie, getCookie, hasCookie, setCookie } from 'cookies-next';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants/common';
 import { OptionsType } from 'cookies-next/src/types';
+import jwt_decode from 'jwt-decode';
+import { JwtPayload } from '@/core/models/AuthModels';
 
 export function setAccessToken(token: string | undefined) {
   if (!token) {
@@ -17,7 +19,11 @@ export function setAccessToken(token: string | undefined) {
 }
 
 export function hasTokens(options?: OptionsType): boolean {
-  return hasCookie(ACCESS_TOKEN, options) && hasCookie(REFRESH_TOKEN, options);
+  return hasAccessToken(options) && hasRefreshToken(options);
+}
+
+export function hasAccessToken(options?: OptionsType): boolean {
+  return hasCookie(ACCESS_TOKEN, options);
 }
 
 export function hasRefreshToken(options?: OptionsType): boolean {
@@ -36,6 +42,21 @@ export function removeTokens(options?: OptionsType) {
   deleteCookie(ACCESS_TOKEN, options);
   deleteCookie(REFRESH_TOKEN, options);
   httpClient.defaults.headers['Authorization'] = '';
+}
+
+export function getJwtPayload(accessToken: string): JwtPayload {
+  const decode: any = jwt_decode(accessToken);
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    memberId: decode.jti,
+    role: decode.role,
+    email: decode.sub,
+    nickname: decode.nickname,
+    ip: decode.ip,
+    expires_at: new Date(decode.exp * 1000),
+    issued_at: new Date(decode.iat * 1000),
+    isVerifiedToken: decode.exp < now && decode.iat > now,
+  };
 }
 
 function getCookieOrEmpty(key: string, options?: OptionsType): string {

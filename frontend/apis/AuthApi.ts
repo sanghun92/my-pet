@@ -1,8 +1,8 @@
 import httpClient from '@/apis/httpClient';
-import { MemberRegisterRequest, SignInRequest, TokenResponse } from '@/models/AuthModels';
-import { GenericResponse, NonDataResponse } from '@/models/ResponseModels';
+import { MemberRegisterRequest, SignInRequest, TokenResponse } from '@/core/models/AuthModels';
+import { GenericResponse, NonDataResponse } from '@/core/models/ResponseModels';
 
-export const requestSignIn = async (req: SignInRequest) => {
+export const postSignIn = async (req: SignInRequest) => {
   return httpClient
     .post<GenericResponse<TokenResponse>>('/v1/auth/login', req, {
       withCredentials: true,
@@ -10,11 +10,11 @@ export const requestSignIn = async (req: SignInRequest) => {
     .then(res => res.data);
 };
 
-export const requestSignUp = async (req: MemberRegisterRequest) => {
+export const postSignUp = async (req: MemberRegisterRequest) => {
   return httpClient.post<NonDataResponse>('/v1/members', req).then(res => res.data);
 };
 
-export const requestReIssueToken = async (refreshToken: string) => {
+export const postReIssueToken = async (refreshToken: string) => {
   return httpClient
     .post<GenericResponse<TokenResponse>>('/v1/auth/token', {
       refreshToken: refreshToken,
@@ -22,11 +22,11 @@ export const requestReIssueToken = async (refreshToken: string) => {
     .then(res => res.data);
 };
 
-export const requestSendEmailVerificationCode = async (email: string) => {
+export const postSendEmailVerificationCode = async (email: string) => {
   return httpClient.post<NonDataResponse>('/v1/auth/verification', email).then(res => res.data);
 };
 
-export const requestVerifyEmailVerificationCode = async (code: string) => {
+export const getVerifyEmailCodeResult = async (code: string) => {
   return httpClient
     .get<NonDataResponse>('/v1/auth/verification', {
       params: { code: code },

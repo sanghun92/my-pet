@@ -4,7 +4,6 @@ import Table from 'mdi-material-ui/Table';
 import CubeOutline from 'mdi-material-ui/CubeOutline';
 import HomeOutline from 'mdi-material-ui/HomeOutline';
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase';
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline';
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline';
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline';
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline';
@@ -20,11 +19,6 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Dashboard',
       icon: HomeOutline,
       path: NavigationPaths.ROOT,
-    },
-    {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: NavigationPaths.MEMBERS.PROFILE,
     },
     {
       sectionTitle: 'Pages',

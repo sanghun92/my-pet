@@ -1,7 +1,18 @@
 export interface AuthModel {
   accessToken?: string;
   isLoggedIn: boolean;
-  isVerifiedEmail?: boolean;
+  jwtPayload?: JwtPayload;
+}
+
+export interface JwtPayload {
+  memberId: number;
+  role: string;
+  email: string;
+  nickname: string;
+  ip: string;
+  issued_at: Date;
+  expires_at: Date;
+  isVerifiedToken: boolean;
 }
 
 export interface SignInForm {
