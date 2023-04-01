@@ -2,19 +2,17 @@ import { getVerifyEmailCodeResult } from '@/apis/AuthApi';
 import { Container, Divider, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import BlankLayout from '@/core/layouts/BlankLayout';
-import { useRecoilState } from 'recoil';
-import { authState } from '@/core/recoil/auth/atoms';
 import { NextPageContext } from 'next/dist/shared/lib/utils';
 
 const EmailVerificationPage = ({ error }: any) => {
-  const [authRecoilState, setAuthRecoilState] = useRecoilState(authState);
+  /*const [authRecoilState, setAuthRecoilState] = useRecoilState(authState);
 
   if (!error) {
     setAuthRecoilState({
       ...authRecoilState,
       isVerifiedEmail: true,
     });
-  }
+  }*/
 
   return (
     <Container disableGutters maxWidth='sm' component='main' sx={{ pt: 8, pb: 6 }}>
