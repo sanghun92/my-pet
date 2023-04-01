@@ -120,14 +120,14 @@ class AuthFacadeTest {
         String email = "test@test.com";
         EmailVerification emailVerification = EmailVerification.randomCode(email);
         emailVerification.changeCertificationCode();
-        given(emailVerificationService.findByEmailOrNew(email)).willReturn(emailVerification);
+        given(emailVerificationService.createEmailVerification(email)).willReturn(emailVerification);
         willDoNothing().given(emailService).send(any(MailMessageDto.class));
 
         // when
         authFacade.sendEmailVerificationCode(email);
 
         // then
-        then(emailVerificationService).should(times(1)).findByEmailOrNew(email);
+        then(emailVerificationService).should(times(1)).createEmailVerification(email);
         then(emailService).should(times(1)).send(any(MailMessageDto.class));
     }
 
@@ -141,7 +141,7 @@ class AuthFacadeTest {
         given(emailVerificationService.findByCode(code)).willReturn(emailVerification);
 
         // when
-        authFacade.verifyEmailVerificationCode(code);
+        authFacade.verifyEmailVerificationCode(code, email);
 
         // then
         then(emailVerificationService).should(times(1)).findByCode(code);

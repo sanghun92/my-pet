@@ -112,11 +112,13 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
     void verifyEmailRequestThenReturnResponse() throws Exception {
         // given
         String code = UUID.randomUUID().toString();
+        String email = "test@test.com";
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
                 get(AuthPaths.VERIFY_EMAIL)
                         .queryParam("code", code)
+                        .queryParam("email", email)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         );
@@ -127,7 +129,8 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         queryParameters(
-                                parameterWithName("code").description("이메일 인증 코드")
+                                parameterWithName("code").description("이메일 인증 코드"),
+                                parameterWithName("email").description("이메일")
                         )
                 ));
     }

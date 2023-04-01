@@ -41,7 +41,7 @@ public record MemberDto(Long id,
     @Override
     public String toString() {
         return "MemberDto{" +
-                "memberId=" + id +
+                "id=" + id +
                 ", email='" + email + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", birthDay=" + birthDay +

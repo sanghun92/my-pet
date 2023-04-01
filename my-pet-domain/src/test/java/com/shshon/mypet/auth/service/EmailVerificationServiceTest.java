@@ -35,7 +35,7 @@ class EmailVerificationServiceTest {
         given(emailVerificationRepository.findByEmail(email)).willReturn(Optional.of(expectedEmailVerification));
 
         // when
-        EmailVerification emailVerification = emailVerificationService.findByEmailOrNew(email);
+        EmailVerification emailVerification = emailVerificationService.createEmailVerification(email);
 
         // then
         then(emailVerificationRepository).should(times(1)).findByEmail(email);

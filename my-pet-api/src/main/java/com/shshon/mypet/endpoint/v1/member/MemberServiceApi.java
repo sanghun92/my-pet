@@ -35,7 +35,7 @@ public class MemberServiceApi {
     @PutMapping("/v1/members/password")
     public void changePassword(@AuthenticationMember LoginMember member,
                                @RequestBody @Valid MemberChangePasswordRequest request) {
-        memberFacade.changePassword(member.id(), request.prevPassword(), request.newPassword());
+        memberFacade.changePassword(member.id(), request.password(), request.newPassword());
     }
 
     @PutMapping("/v1/members")

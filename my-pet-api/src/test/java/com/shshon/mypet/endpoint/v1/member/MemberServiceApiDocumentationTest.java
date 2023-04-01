@@ -116,7 +116,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                                 authTokenHeader()
                         ),
                         requestFields(
-                                fieldWithPath("prevPassword").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 이전 비밀번호"),
+                                fieldWithPath("password").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 이전 비밀번호"),
                                 fieldWithPath("newPassword").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 신규 비밀번호")
                         )
                 ));
@@ -165,15 +165,15 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                         ),
                         responseFields(
                                 beneathPath("data").withSubsectionId("data"),
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원 ID"),
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원 Email 주소"),
-                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                fieldWithPath("birthDay").type(JsonFieldType.STRING).description("회원 생일")
+                                fieldWithPath("profile.id").type(JsonFieldType.NUMBER).description("회원 ID"),
+                                fieldWithPath("profile.email").type(JsonFieldType.STRING).description("회원 Email 주소"),
+                                fieldWithPath("profile.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("profile.birthDay").type(JsonFieldType.STRING).description("회원 생일")
                                         .attributes(getDateFormat())
                                         .optional(),
-                                fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("회원 핸드폰 번호")
+                                fieldWithPath("profile.phoneNumber").type(JsonFieldType.STRING).description("회원 핸드폰 번호")
                                         .optional(),
-                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("가입 일자")
+                                fieldWithPath("profile.createdAt").type(JsonFieldType.STRING).description("가입 일자")
                         )
                 ));
     }

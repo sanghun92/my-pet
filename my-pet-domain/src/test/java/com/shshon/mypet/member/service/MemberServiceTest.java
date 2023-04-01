@@ -2,6 +2,7 @@ package com.shshon.mypet.member.service;
 
 import com.shshon.mypet.member.domain.Member;
 import com.shshon.mypet.member.domain.MemberRepository;
+import com.shshon.mypet.member.domain.event.MemberCreateEvent;
 import com.shshon.mypet.member.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,17 +10,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private MemberService memberService;
@@ -34,6 +40,7 @@ class MemberServiceTest {
                 .nickname("myNickName")
                 .build();
         given(memberRepository.save(any())).willReturn(memberDto.toMember());
+        willDoNothing().given(eventPublisher).publishEvent(any(MemberCreateEvent.class));
 
         // when
         Member member = memberService.createMember(memberDto);

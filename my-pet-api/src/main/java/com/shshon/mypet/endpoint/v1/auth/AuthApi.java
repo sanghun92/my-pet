@@ -42,8 +42,9 @@ public class AuthApi {
     }
 
     @GetMapping(value = "/v1/auth/verification", consumes = MediaType.ALL_VALUE)
-    public void verifyEmailVerificationCode(@RequestParam("code") String code) {
-        authFacade.verifyEmailVerificationCode(code);
+    public void verifyEmailVerificationCode(@RequestParam("code") String code,
+                                            @RequestParam("email") String email) {
+        authFacade.verifyEmailVerificationCode(code, email);
     }
 
     @PostMapping("/v1/auth/token")

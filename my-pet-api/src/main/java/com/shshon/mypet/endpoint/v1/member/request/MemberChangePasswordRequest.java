@@ -7,9 +7,9 @@ import jakarta.validation.constraints.Pattern;
 
 public record MemberChangePasswordRequest(
 
-        @JsonProperty("prevPassword")
+        @JsonProperty("password")
         @NotNull(message = "이전 비밀번호는 필수값 입니다.")
-        String prevPassword,
+        String password,
 
         @JsonProperty("newPassword")
         @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",

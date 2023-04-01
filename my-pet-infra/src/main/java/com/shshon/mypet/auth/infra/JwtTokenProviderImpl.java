@@ -42,7 +42,9 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
                 .setSubject(member.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(validity);
+        claims.put("nickname", member.getNickname());
         claims.put("ip", client.ip());
+        claims.put("role", "USER");
 
         return Jwts.builder()
                 .setClaims(claims)

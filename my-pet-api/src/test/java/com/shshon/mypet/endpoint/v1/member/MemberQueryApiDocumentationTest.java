@@ -1,5 +1,7 @@
 package com.shshon.mypet.endpoint.v1.member;
 
+import com.shshon.mypet.auth.application.AuthFacade;
+import com.shshon.mypet.auth.dto.EmailVerificationDto;
 import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.member.application.MemberFacade;
 import com.shshon.mypet.member.dto.MemberDto;
@@ -32,6 +34,9 @@ class MemberQueryApiDocumentationTest extends ApiDocumentationTest {
     @MockBean
     private MemberFacade memberFacade;
 
+    @MockBean
+    private AuthFacade authFacade;
+
     @Test
     @DisplayName("회원 프로필 조회 요청시 조회 후 200 코드로 응답한다")
     void findMemberProfileRequestThenReturnResponse() throws Exception {
@@ -45,7 +50,9 @@ class MemberQueryApiDocumentationTest extends ApiDocumentationTest {
                 .birthDay(LocalDate.now())
                 .createdAt(LocalDateTime.of(2022, 2, 1, 13, 54))
                 .build();
-        given(memberFacade.findMember(any(Long.class))).willReturn(memberDto);
+        EmailVerificationDto emailVerificationDto = new EmailVerificationDto(LocalDateTime.now(), true);
+        given(memberFacade.findMemberProfileBy(any(Long.class))).willReturn(memberDto);
+        given(authFacade.findEmailVerificationBy(any(String.class))).willReturn(emailVerificationDto);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
@@ -65,15 +72,17 @@ class MemberQueryApiDocumentationTest extends ApiDocumentationTest {
                         ),
                         responseFields(
                                 beneathPath("data").withSubsectionId("data"),
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원 ID"),
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원 Email 주소"),
-                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                fieldWithPath("birthDay").type(JsonFieldType.STRING).description("회원 생일")
+                                fieldWithPath("profile.id").type(JsonFieldType.NUMBER).description("회원 ID"),
+                                fieldWithPath("profile.email").type(JsonFieldType.STRING).description("회원 Email 주소"),
+                                fieldWithPath("profile.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("profile.birthDay").type(JsonFieldType.STRING).description("회원 생일")
                                         .attributes(getDateFormat())
                                         .optional(),
-                                fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("회원 핸드폰 번호")
+                                fieldWithPath("profile.phoneNumber").type(JsonFieldType.STRING).description("회원 핸드폰 번호")
                                         .optional(),
-                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("가입 일자")
+                                fieldWithPath("profile.createdAt").type(JsonFieldType.STRING).description("가입 일자"),
+                                fieldWithPath("emailVerification.verifiedAt").type(JsonFieldType.STRING).description("이메일 인증 일자").optional(),
+                                fieldWithPath("emailVerification.isVerified").type(JsonFieldType.BOOLEAN).description("이메일 인증 여부").optional()
                         )
                 ));
     }

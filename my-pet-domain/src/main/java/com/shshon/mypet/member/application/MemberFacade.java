@@ -28,11 +28,11 @@ public class MemberFacade {
     }
 
     @Transactional
-    public void changePassword(Long id, String prevPassword, String newPassword) {
+    public void changePassword(Long id, String password, String newPassword) {
         log.info("회원 비밀번호 변경 요청 - id : {}", id);
         Member member = memberService.findById(id);
         try {
-            member.authenticate(prevPassword);
+            member.authenticate(password);
         } catch (AuthorizationException e) {
             throw new ClientException("이전 비밀번호가 일치하지 않습니다");
         }
@@ -41,7 +41,7 @@ public class MemberFacade {
 
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = CacheNames.MEMBER, key = "#id")
-    public MemberDto findMember(Long id) {
+    public MemberDto findMemberProfileBy(Long id) {
         log.info("회원 프로필 조회 요청 - id : {}", id);
         Member member = memberService.findById(id);
         return MemberDto.from(member);

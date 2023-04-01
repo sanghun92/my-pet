@@ -3,7 +3,7 @@
 반려 동물의 일상을 공유하는 서비스입니다.
 
 - 살펴보기 : https://my-pet.o-r.kr
-- API 명세서 : https://my-pet.o-r.kr/api
+- API 명세서 : https://my-pet.o-r.kr/api/docs
 
 ### ✅ 프로젝트 목표
 

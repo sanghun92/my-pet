@@ -63,6 +63,7 @@ public class CacheConfig {
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = InitialCacheConfigurationBuilder.builder()
                 .add(CacheNames.MEMBER, CacheNames.MEMBER_EXP_SEC)
+                .add(CacheNames.EMAIL_VERIFICATION, CacheNames.EMAIL_VERIFICATION_EXP_SEC)
                 .build();
 
         return RedisCacheManager

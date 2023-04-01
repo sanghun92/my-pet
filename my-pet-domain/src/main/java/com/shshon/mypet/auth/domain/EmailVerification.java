@@ -41,6 +41,10 @@ public class EmailVerification extends BaseTimeEntity {
         return new EmailVerification(email, UUID.randomUUID(), null);
     }
 
+    public static EmailVerification empty() {
+        return new EmailVerification(null, null, null);
+    }
+
     public void changeCertificationCode() {
         this.code = UUID.randomUUID();
     }
@@ -60,8 +64,12 @@ public class EmailVerification extends BaseTimeEntity {
         return this.verifiedAt != null;
     }
 
+    public LocalDateTime getVerifiedAt() {
+        return this.verifiedAt;
+    }
+
     public MailMessageDto generateVerificationMailMessage() {
-        String certificationLink = String.format("http://localhost/join/email-verification?code=%s", getCode());
+        String certificationLink = String.format("http://localhost/join/email-verification?code=%s&email=%s", getCode(), this.email);
 
         Map<String, String> attribute = new HashMap<>();
         attribute.put("name", email);
