@@ -5,11 +5,12 @@ import com.shshon.mypet.docs.snippet.CustomResponseFieldsSnippet;
 import com.shshon.mypet.endpoint.v1.common.Docs;
 import com.shshon.mypet.endpoint.v1.common.EnumViewController;
 import com.shshon.mypet.endpoint.v1.response.OkResponseV1;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadSubsectionExtractor;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -24,8 +25,14 @@ import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(EnumViewController.class)
 public class CommonDocumentationTest extends ApiDocumentationTest {
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = apiMockMvc(new EnumViewController());
+    }
 
     @Test
     void commons() throws Exception {
@@ -35,7 +42,7 @@ public class CommonDocumentationTest extends ApiDocumentationTest {
         Docs docs = getData(resultActions.andReturn());
 
         resultActions.andExpect(status().isOk())
-                .andDo(document("common",
+                .andDo((document("common",
                         responseFields(
                                 attributes(key("title").value("공통 응답")),
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
@@ -55,12 +62,12 @@ public class CommonDocumentationTest extends ApiDocumentationTest {
                                 attributes(key("title").value("type")),
                                 enumConvertFieldDescriptor(docs.getPetTypes())
                         )
-                ));
+                )));
     }
 
     private Docs getData(MvcResult mvcResult) throws IOException {
-        OkResponseV1<Docs> apiResponse = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(),
-                new TypeReference<OkResponseV1<Docs>>() {
+        OkResponseV1<Docs> apiResponse = OBJECT_MAPPER.readValue(mvcResult.getResponse().getContentAsByteArray(),
+                new TypeReference<>() {
                 });
         return apiResponse.getData();
     }

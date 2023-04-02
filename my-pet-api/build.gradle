@@ -3,7 +3,6 @@ plugins {
 }
 
 ext {
-    asciidocVersion = "3.0.0"
     snippetsDir = file('build/generated-snippets')
 }
 
@@ -24,10 +23,9 @@ dependencies {
     implementation project(':my-pet-config')
     implementation project(':my-pet-domain')
 
-    testImplementation 'io.rest-assured:rest-assured:5.3.0'
-    asciidoctorExt "org.springframework.restdocs:spring-restdocs-asciidoctor:${asciidocVersion}"
-    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc:${asciidocVersion}"
-    testImplementation 'com.google.guava:guava:14.0'
+    asciidoctorExt "org.springframework.restdocs:spring-restdocs-asciidoctor"
+    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
+    testImplementation 'com.google.guava:guava:31.1-jre'
 
     // to fix [javax.annotation.meta.When not found]
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

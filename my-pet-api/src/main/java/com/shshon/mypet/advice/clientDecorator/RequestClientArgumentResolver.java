@@ -51,7 +51,13 @@ public class RequestClientArgumentResolver implements HandlerMethodArgumentResol
     }
 
     private String getUserAgent(HttpServletRequest httpServletRequest) {
-        String userAgent = httpServletRequest.getHeader("User-Agent").toUpperCase();
+        String userAgent = httpServletRequest.getHeader("User-Agent");
+        if (userAgent == null) {
+            return null;
+        } else {
+            userAgent = userAgent.toUpperCase();
+        }
+
         if (userAgent.contains(IS_MOBILE)) {
             if (!userAgent.contains(IS_PHONE)) {
                 return IS_MOBILE;

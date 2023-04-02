@@ -6,12 +6,13 @@ import com.shshon.mypet.docs.ApiDocumentationTest;
 import com.shshon.mypet.member.application.MemberFacade;
 import com.shshon.mypet.member.dto.MemberDto;
 import com.shshon.mypet.paths.MemberPaths;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -29,14 +30,20 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberQueryApi.class)
 class MemberQueryApiDocumentationTest extends ApiDocumentationTest {
 
-    @MockBean
+    @Mock
+    private AuthFacade authFacade;
+
+    @Mock
     private MemberFacade memberFacade;
 
-    @MockBean
-    private AuthFacade authFacade;
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = apiMockMvc(new MemberQueryApi(authFacade, memberFacade));
+    }
 
     @Test
     @DisplayName("회원 프로필 조회 요청시 조회 후 200 코드로 응답한다")

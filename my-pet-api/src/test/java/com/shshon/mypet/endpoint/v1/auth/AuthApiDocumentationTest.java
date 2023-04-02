@@ -10,12 +10,14 @@ import com.shshon.mypet.endpoint.v1.auth.request.LoginMemberRequest;
 import com.shshon.mypet.endpoint.v1.auth.request.SendEmailVerificationCodeRequest;
 import com.shshon.mypet.endpoint.v1.auth.request.TokenReIssueRequest;
 import com.shshon.mypet.paths.AuthPaths;
+import com.shshon.mypet.properties.JwtTokenProperties;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -37,25 +39,35 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthApi.class)
 class AuthApiDocumentationTest extends ApiDocumentationTest {
 
-    @MockBean
+    @Mock
     private AuthFacade authFacade;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        JwtTokenProperties jwtTokenProperties = new JwtTokenProperties(
+                new JwtTokenProperties.AccessToken("test", 5L),
+                new JwtTokenProperties.RefreshToken(5L)
+        );
+        AuthApi controller = new AuthApi(authFacade, jwtTokenProperties);
+        mockMvc = apiMockMvc(controller);
+    }
 
     @Test
     @DisplayName("로그인 요청시 회원 인증 후 토큰 정보를 반환한다.")
     void loginMemberRequestThenReturnTokenResponse() throws Exception {
         // given
-        String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
-        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1", "PC");
-        given(authFacade.login(any(), any(), any())).willReturn(new TokenDto(accessToken, refreshToken));
-
-        // when
         LoginMemberRequest request = LoginMemberRequest.builder()
                 .email("test@test.com")
                 .password("myPassword123456!")
                 .build();
+        RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1", "PC");
+        given(authFacade.login(any(), any(), any())).willReturn(new TokenDto(ACCESS_TOKEN, refreshToken));
+
+        // when
         ResultActions resultActions = this.mockMvc.perform(
                 post(AuthPaths.LOGIN)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -142,9 +154,8 @@ class AuthApiDocumentationTest extends ApiDocumentationTest {
     void reIssueTokenRequestThenReturnResponse() throws Exception {
         // given
         TokenReIssueRequest request = new TokenReIssueRequest(UUID.randomUUID().toString());
-        String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjc2NTM5NTgxLCJleHAiOjE2NzY1Mzk1ODN9.LTTbWaHFm5377EJURkf5NMmjXxDMgaHjGXw5EwUWrZ8";
         RefreshToken refreshToken = new RefreshToken(1L, "test@test.com", "0.0.0.1", "PC");
-        given(authFacade.reIssueToken(eq(request.refreshToken()), any(HttpRequestClient.class))).willReturn(new TokenDto(accessToken, refreshToken));
+        given(authFacade.reIssueToken(eq(request.refreshToken()), any(HttpRequestClient.class))).willReturn(new TokenDto(ACCESS_TOKEN, refreshToken));
 
         // when
         ResultActions resultActions = this.mockMvc.perform(

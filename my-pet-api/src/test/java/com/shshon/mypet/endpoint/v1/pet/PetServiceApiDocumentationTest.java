@@ -13,13 +13,14 @@ import com.shshon.mypet.pet.dto.PetDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -29,6 +30,7 @@ import static com.shshon.mypet.docs.util.DocumentLinkGenerator.DocUrl.PET_BODY_T
 import static com.shshon.mypet.docs.util.DocumentLinkGenerator.DocUrl.PET_GENDERS;
 import static com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor.AUTHORIZATION;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -40,22 +42,22 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PetServiceApi.class)
 class PetServiceApiDocumentationTest extends ApiDocumentationTest {
 
-    @MockBean
+    @Mock
     private PetService petService;
 
-    @MockBean
+    @Mock
     private ImageDtoMapper imageDtoMapper;
 
-    private String memberEmail;
+    private MockMvc mockMvc;
+
     private long categoryId;
 
     @BeforeEach
     public void setUp() {
-        this.memberEmail = "test@test.com";
         this.categoryId = 1L;
+        this.mockMvc = apiMockMvc(new PetServiceApi(petService, imageDtoMapper));
     }
 
     @Test
@@ -72,6 +74,7 @@ class PetServiceApiDocumentationTest extends ApiDocumentationTest {
                 .build();
         MockMultipartFile petImage = new MockMultipartFile("petImage", "coffee_sample.jpg", MediaType.MULTIPART_FORM_DATA_VALUE, new byte[0]);
         MockMultipartFile request = new MockMultipartFile("request", "request", MediaType.APPLICATION_JSON_VALUE, toJsonBytes(petRegisterRequest));
+        given(imageDtoMapper.toImageMetaData(any(MultipartFile.class))).willReturn(ImageDto.builder().build());
         willDoNothing().given(petService).registerMyPet(any(Long.class), any(Long.class), any(PetDto.class), any(ImageDto.class));
 
         // when
@@ -82,6 +85,7 @@ class PetServiceApiDocumentationTest extends ApiDocumentationTest {
                         .header(AUTHORIZATION, auth())
                         .contentType(MediaType.MULTIPART_MIXED_VALUE)
         );
+
 
         // then
         resultActions.andExpect(status().isCreated())

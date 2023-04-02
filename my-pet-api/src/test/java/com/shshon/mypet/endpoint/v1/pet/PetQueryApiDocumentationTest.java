@@ -15,10 +15,10 @@ import com.shshon.mypet.petcategory.dto.PetCategoryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -35,22 +35,22 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PetQueryApi.class)
 class PetQueryApiDocumentationTest extends ApiDocumentationTest {
 
-    @MockBean
+    @Mock
     private PetQueryService petQueryService;
 
-    @MockBean
+    @Mock
     private PetCategoryQueryService petCategoryQueryService;
 
-    private String userEmail;
+    private MockMvc mockMvc;
+
     private long categoryId;
 
     @BeforeEach
     public void setUp() {
-        this.userEmail = "test@test.com";
         this.categoryId = 1L;
+        mockMvc = apiMockMvc(new PetQueryApi(petQueryService, petCategoryQueryService));
     }
 
     @Test

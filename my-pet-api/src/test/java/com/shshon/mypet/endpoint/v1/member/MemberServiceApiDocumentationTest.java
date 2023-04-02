@@ -7,13 +7,14 @@ import com.shshon.mypet.endpoint.v1.member.request.MemberRegisterRequest;
 import com.shshon.mypet.member.application.MemberFacade;
 import com.shshon.mypet.member.dto.MemberDto;
 import com.shshon.mypet.paths.MemberPaths;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -25,7 +26,6 @@ import static com.shshon.mypet.endpoint.v1.auth.AuthorizationExtractor.AUTHORIZA
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -34,34 +34,32 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberServiceApi.class)
 class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
 
-    @MockBean
+    @Mock
     private MemberFacade memberFacade;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = apiMockMvc(new MemberServiceApi(memberFacade));
+    }
 
     @Test
     @DisplayName("회원 가입 요청시 회원 생성 후 201 코드로 응답한다")
     void createMemberRequestThenReturnResponse() throws Exception {
         // given
-        MemberDto memberDto = MemberDto.builder()
-                .id(1L)
+        MemberRegisterRequest request = MemberRegisterRequest.builder()
                 .email("test@test.com")
                 .password("myPassword123456!")
                 .nickname("루루")
                 .phoneNumber("01012345678")
                 .birthDay(LocalDate.now())
                 .build();
-        given(memberFacade.createMember(any(MemberDto.class))).willReturn(memberDto);
+        given(memberFacade.createMember(request.toMember())).willReturn(request.toMember());
 
         // when
-        MemberRegisterRequest request = MemberRegisterRequest.builder()
-                .email(memberDto.email())
-                .password(memberDto.password())
-                .nickname(memberDto.nickname())
-                .phoneNumber(memberDto.phoneNumber())
-                .birthDay(memberDto.birthDay())
-                .build();
         ResultActions resultActions = this.mockMvc.perform(
                 post(MemberPaths.JOIN_MEMBER)
                         .content(toJsonBytes(request))
@@ -96,7 +94,6 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
     void changeMemberPasswordRequestThenReturnResponse() throws Exception {
         // given
         MemberChangePasswordRequest request = new MemberChangePasswordRequest("PrevPassword123!", "NewPassword1234!");
-        willDoNothing().given(memberFacade).changePassword(any(Long.class), any(String.class), any(String.class));
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
@@ -116,7 +113,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                                 authTokenHeader()
                         ),
                         requestFields(
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 이전 비밀번호"),
+                                fieldWithPath("password").type(JsonFieldType.STRING).description("이전 비밀번호"),
                                 fieldWithPath("newPassword").type(JsonFieldType.STRING).description("영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 신규 비밀번호")
                         )
                 ));
@@ -127,7 +124,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
     void editMemberProfileRequestThenReturnResponse() throws Exception {
         // given
         MemberEditProfileRequest request = new MemberEditProfileRequest("신규 닉네임", LocalDate.now(), "01099881234");
-        MemberDto memberDto = MemberDto.builder()
+        MemberDto editedMember = MemberDto.builder()
                 .id(1L)
                 .email("test@test.com")
                 .password("myPassword123456!")
@@ -136,7 +133,7 @@ class MemberServiceApiDocumentationTest extends ApiDocumentationTest {
                 .birthDay(request.birthDay())
                 .createdAt(LocalDateTime.of(2022, 2, 1, 13, 54))
                 .build();
-        given(memberFacade.editMember(any(Long.class), eq(request.toMember()))).willReturn(memberDto);
+        given(memberFacade.editMember(any(Long.class), eq(request.toMember()))).willReturn(editedMember);
 
         // when
         ResultActions resultActions = this.mockMvc.perform(
